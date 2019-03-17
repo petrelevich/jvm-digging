@@ -1,0 +1,19 @@
+package instrumentation;
+
+/*
+    java -javaagent:agentDemo.jar -jar agentDemo.jar
+*/
+public class AgentDemo {
+
+    public static void main(String[] args) throws Exception {
+        System.out.println("main");
+        MyClass demo = new MyClass();
+        System.out.println(demo.getValue());
+        modifyPrivateValue(demo);
+        System.out.println(demo.getValue());
+    }
+
+    private static void modifyPrivateValue(MyClass demo) throws Exception {
+        demo.getClass().getMethod("setValue", int.class).invoke(demo, -4);
+    }
+}
