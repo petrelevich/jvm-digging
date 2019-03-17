@@ -1,0 +1,1 @@
+ClassForLoading.class from ClassForLoading.java must be here.
