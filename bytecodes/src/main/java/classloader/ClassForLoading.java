@@ -1,4 +1,4 @@
-package classLoader;
+package classloader;
 
 public class ClassForLoading {
     public ClassForLoading() {}
