@@ -1,4 +1,4 @@
-package instrumentation;
+package instrumentation.setter;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
@@ -25,7 +25,7 @@ public class Agent {
                                       Class<?>            classBeingRedefined,
                                       ProtectionDomain    protectionDomain,
                                       byte[]              classfileBuffer) {
-                if(className.equals("instrumentation/MyClass")) {
+                if(className.equals("instrumentation/setter/MyClass")) {
                     return addMethod(classfileBuffer);
                 }
                 return classfileBuffer;
@@ -44,7 +44,7 @@ public class Agent {
 
         mv.visitVarInsn(Opcodes.ALOAD, 0);
         mv.visitVarInsn(Opcodes.ILOAD,1);
-        mv.visitFieldInsn(Opcodes.PUTFIELD,"instrumentation/MyClass", "value", "I");
+        mv.visitFieldInsn(Opcodes.PUTFIELD, "instrumentation/setter/MyClass", "value", "I");
 
         mv.visitInsn(Opcodes.RETURN);
         mv.visitMaxs(0, 0);

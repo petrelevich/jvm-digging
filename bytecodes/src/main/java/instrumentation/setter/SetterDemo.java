@@ -1,9 +1,9 @@
-package instrumentation;
+package instrumentation.setter;
 
 /*
-    java -javaagent:agentDemo.jar -jar agentDemo.jar
+    java -javaagent:setterDemo.jar -jar setterDemo.jar
 */
-public class AgentDemo {
+public class SetterDemo {
 
     public static void main(String[] args) throws Exception {
         System.out.println("main");

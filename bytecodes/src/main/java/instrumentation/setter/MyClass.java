@@ -1,4 +1,4 @@
-package instrumentation;
+package instrumentation.setter;
 
 
 public class MyClass {
