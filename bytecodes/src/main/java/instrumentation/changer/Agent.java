@@ -53,7 +53,7 @@ public class Agent {
 
         byte[] finalClass = cw.toByteArray();
 
-        try (OutputStream fos = new FileOutputStream("proxy.class")) {
+        try (OutputStream fos = new FileOutputStream("changer.class")) {
             fos.write(finalClass);
         } catch (Exception e) {
             e.printStackTrace();

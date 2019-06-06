@@ -52,7 +52,7 @@ public class Agent {
 
         byte[] finalClass = cw.toByteArray();
 
-        try(OutputStream fos = new FileOutputStream("test.class")) {
+        try(OutputStream fos = new FileOutputStream("setter.class")) {
             fos.write(finalClass);
         } catch (Exception e) {
             e.printStackTrace();
