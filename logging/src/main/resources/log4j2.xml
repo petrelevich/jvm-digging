@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration packages="ru.logs.appender">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+
+        <SlowAppender name="SlowAppender"/>
+
+        <Async name="Async-SlowAppender" blocking="false" bufferSize="10" errorRef="Console">
+            <AppenderRef ref="SlowAppender"/>
+            <DisruptorBlockingQueue/>
+        </Async>
+
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+        </Root>
+
+        <Logger name="ru.logs.LoggerTest" level="info" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <Logger name="ru.logs.LoggerTest.slow" level="info" additivity="false">
+            <AppenderRef ref="SlowAppender"/>
+        </Logger>
+
+        <Logger name="ru.logs.LoggerTest.slowAsync" level="info" additivity="false">
+            <AppenderRef ref="Async-SlowAppender"/>
+        </Logger>
+
+    </Loggers>
+</Configuration>
