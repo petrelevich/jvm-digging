@@ -5,13 +5,22 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.concurrent.TimeUnit;
 
+/*
+<ArrayBlockingQueue/>
+<DisruptorBlockingQueue/>
+
+https://martinfowler.com/articles/lmax.html
+https://github.com/LMAX-Exchange/disruptor/wiki/Introduction
+https://lmax-exchange.github.io/disruptor/files/Disruptor-1.0.pdf
+ */
+
 public class LoggerTest {
     private static final Logger logger = LogManager.getLogger(LoggerTest.class);
     private static final Logger loggerSlow = LogManager.getLogger(LoggerTest.class.getName() + ".slow");
     private static final Logger loggerSlowAsync = LogManager.getLogger(LoggerTest.class.getName() + ".slowAsync");
 
     public static void main(String[] args) {
-       // someActionWithLog(loggerSlow);
+     //   someActionWithLog(loggerSlow);
         System.out.println("----------------");
         someActionWithLog(loggerSlowAsync);
     }
