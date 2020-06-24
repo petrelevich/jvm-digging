@@ -1,0 +1,40 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
+    id 'java'
+}
+
+sourceCompatibility = JavaVersion.VERSION_13
+targetCompatibility = JavaVersion.VERSION_13
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile("ch.qos.logback:logback-classic:1.2.3")
+    compile("org.flywaydb:flyway-core:6.4.4")
+    compile("org.postgresql:postgresql:42.2.14")
+
+    testCompile("org.junit.jupiter:junit-jupiter-engine:5.5.2")
+    testCompile("org.assertj:assertj-core:3.13.2")
+    testCompile("org.mockito:mockito-junit-jupiter:3.1.0")
+
+    testCompile("org.testcontainers:junit-jupiter:1.13.0")
+    testCompile("org.testcontainers:postgresql:1.13.0")
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+shadowJar {
+    archiveClassifier = ''
+    manifest {
+        attributes 'Main-Class': 'ru.usermng.Application'
+    }
+}
+
+tasks.build.dependsOn tasks.shadowJar
