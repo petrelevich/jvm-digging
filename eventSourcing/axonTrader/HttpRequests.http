@@ -1,0 +1,45 @@
+###
+POST http://localhost:8081/trade
+Accept: */*
+Content-Type: application/json
+Cache-Control: no-cache
+
+{
+  "tradeId": 5,
+  "shortName": "SIBN",
+  "side": "SELL",
+  "size": 2
+}
+
+###
+POST http://localhost:8081/trade
+Accept: */*
+Content-Type: application/json
+Cache-Control: no-cache
+
+{
+"tradeId": 4,
+"shortName": "SBERP",
+"side": "BUY",
+"size": 2
+}
+
+###
+GET http://localhost:8082/trade/all
+Accept: */*
+Content-Type: application/json
+Cache-Control: no-cache
+
+###
+GET http://localhost:8082/currentPosition/
+Accept: */*
+Content-Type: application/json
+Cache-Control: no-cache
+
+
+###
+GET http://localhost:8082/currentPosition/SBERP
+Accept: */*
+Content-Type: application/json
+Cache-Control: no-cache
+
