@@ -11,18 +11,17 @@ import ru.trademgr.model.Trade;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class TradesEventHandler {
 
-    private final Map<Long, Trade> trades = new TreeMap<>();
-    private final Map<String, Long> position = new HashMap<>();
+    private final Map<Long, Trade> trades = new ConcurrentHashMap<>();
+    private final Map<String, Long> position = new ConcurrentHashMap<>();
 
     @EventHandler
     public void on(CreatedTradeEvent event) {

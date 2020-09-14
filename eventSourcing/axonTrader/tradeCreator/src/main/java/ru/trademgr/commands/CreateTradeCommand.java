@@ -10,6 +10,7 @@ import ru.trademgr.model.Side;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Value
 @Accessors(fluent = true)
@@ -17,6 +18,8 @@ import java.time.LocalDateTime;
 public class CreateTradeCommand {
     @RoutingKey
     @TargetAggregateIdentifier
+    private UUID id = UUID.randomUUID();
+
     long tradeId;
 
     LocalDateTime tradeTime;

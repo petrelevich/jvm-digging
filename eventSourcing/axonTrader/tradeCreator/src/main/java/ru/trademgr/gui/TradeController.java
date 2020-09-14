@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.trademgr.commands.CreateTradeCommand;
 import ru.trademgr.model.Trade;
 
+import java.util.concurrent.TimeUnit;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -37,10 +39,9 @@ public class TradeController {
                 .marketFee(trade.getMarketFee())
                 .build();
         try {
-            var result = commandGateway.send(createTradeCommand);
-            result.join();
-            log.info(result.get().toString());
-            return ResponseEntity.ok(result.get().toString());
+            var result = commandGateway.sendAndWait(createTradeCommand, 3, TimeUnit.SECONDS);
+            log.info(result.toString());
+            return ResponseEntity.ok(result.toString());
         } catch (Exception ex) {
             log.error("error while processing trade:{}", trade, ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
