@@ -1,0 +1,53 @@
+import org.gradle.api.tasks.compile.JavaCompile
+
+plugins {
+    id 'java'
+    id 'idea'
+    id "io.freefair.lombok" version "5.2.1"
+}
+
+sourceCompatibility = JavaVersion.VERSION_14
+targetCompatibility = JavaVersion.VERSION_14
+
+idea {
+    project {
+        languageLevel = 14
+    }
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'ch.qos.logback:logback-classic:1.2.3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.2'
+
+    compileOnly 'org.projectlombok:lombok'
+
+    testImplementation('org.junit.jupiter:junit-jupiter-api:5.6.2')
+    testImplementation('org.junit.jupiter:junit-jupiter-engine:5.6.2')
+    testImplementation('org.assertj:assertj-core:3.16.1')
+    testImplementation('org.mockito:mockito-core:3.3.3')
+    testImplementation('org.mockito:mockito-junit-jupiter:3.3.3')
+
+    annotationProcessor 'org.projectlombok:lombok'
+
+    test {
+        useJUnitPlatform()
+        testLogging {
+            events "passed", "skipped", "failed"
+        }
+    }
+
+    tasks.withType(JavaCompile) {
+        options.with {
+            encoding = 'UTF-8'
+        }
+    }
+
+}
