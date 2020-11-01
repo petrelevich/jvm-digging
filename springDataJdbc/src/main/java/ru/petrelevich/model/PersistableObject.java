@@ -1,6 +1,8 @@
 package ru.petrelevich.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -12,10 +14,22 @@ public class PersistableObject implements Persistable<Long> {
     private final String name;
     private final String data;
 
-    public PersistableObject(Long id, String name, String data) {
+    @Transient
+    private final boolean isNew;
+
+    @PersistenceConstructor
+    private PersistableObject(Long id, String name, String data) {
         this.id = id;
         this.name = name;
         this.data = data;
+        this.isNew = false;
+    }
+
+    public PersistableObject(boolean isNew, Long id, String name, String data) {
+        this.id = id;
+        this.name = name;
+        this.data = data;
+        this.isNew = isNew;
     }
 
     @Override
@@ -25,7 +39,7 @@ public class PersistableObject implements Persistable<Long> {
 
     @Override
     public boolean isNew() {
-        return true;
+        return isNew;
     }
 
     public String getName() {
