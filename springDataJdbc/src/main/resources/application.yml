@@ -1,0 +1,10 @@
+app:
+  datasource:
+    demo-db:
+      jdbcUrl: jdbc:postgresql://localhost:5432/demoDb
+      username: usr
+      password: pwd
+
+spring:
+  flyway:
+    enabled: true

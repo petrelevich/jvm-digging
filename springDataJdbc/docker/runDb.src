@@ -1,0 +1,7 @@
+docker run --rm --name demoDb \
+-e POSTGRES_PASSWORD=pwd \
+-e POSTGRES_USER=usr \
+-e POSTGRES_DB=demoDb \
+-e PGDATA=/var/lib/postgresql/data/pgdata \
+-p 5432:5432 \
+postgres:12
