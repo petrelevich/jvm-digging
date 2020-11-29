@@ -7,10 +7,10 @@ import ru.petrelevich.repository.base.BasePersistenceTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class RepositoryPersistableObjectTest extends BasePersistenceTest {
+class PersistableObjectRepositoryTest extends BasePersistenceTest {
 
     @Autowired
-    RepositoryPersistableObject repository;
+    PersistableObjectRepository repository;
 
     @Test
     void saveTestWithNullId() {

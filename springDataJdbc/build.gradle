@@ -1,7 +1,7 @@
 plugins {
     id 'idea'
     id 'java'
-    id 'org.springframework.boot' version '2.3.5.RELEASE'
+    id 'org.springframework.boot' version '2.4.0'
 }
 
 sourceCompatibility = JavaVersion.VERSION_15
@@ -22,13 +22,13 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc:2.3.5.RELEASE'
-    implementation 'org.postgresql:postgresql:42.2.14'
-    implementation 'org.flywaydb:flyway-core:6.3.3'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc:2.4.0'
+    implementation 'org.postgresql:postgresql:42.2.18'
+    implementation 'org.flywaydb:flyway-core:7.3.0'
 
-    testImplementation 'org.testcontainers:postgresql:1.14.3'
-    testImplementation 'org.testcontainers:junit-jupiter:1.14.3'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.3.5.RELEASE'
+    testImplementation 'org.testcontainers:postgresql:1.15.0'
+    testImplementation 'org.testcontainers:junit-jupiter:1.15.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.4.0'
 }
 
 test {

@@ -11,7 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import ru.petrelevich.config.DataSourceConfig;
 import ru.petrelevich.config.FlywayConfig;
-import ru.petrelevich.repository.RepositorySomeObject;
+import ru.petrelevich.repository.SomeObjectRepository;
 
 @TestConfiguration
 @ImportAutoConfiguration(classes = {
@@ -22,6 +22,6 @@ import ru.petrelevich.repository.RepositorySomeObject;
         JacksonAutoConfiguration.class
 })
 @Import({DataSourceConfig.class, FlywayConfig.class})
-@ComponentScan(basePackageClasses = {RepositorySomeObject.class})
+@ComponentScan(basePackageClasses = {SomeObjectRepository.class})
 public class TestPersistenceConfiguration {
 }

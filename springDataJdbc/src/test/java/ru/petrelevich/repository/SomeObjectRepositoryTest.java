@@ -9,10 +9,10 @@ import ru.petrelevich.repository.base.BasePersistenceTest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class RepositorySomeObjectTest extends BasePersistenceTest {
+class SomeObjectRepositoryTest extends BasePersistenceTest {
 
     @Autowired
-    RepositorySomeObject repository;
+    SomeObjectRepository repository;
 
     @Test
     void saveTestWithNullOrZeroId() {
