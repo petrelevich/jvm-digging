@@ -5,6 +5,6 @@ app:
       username: usr
       password: pwd
 
-spring:
-  flyway:
-    enabled: true
+logging:
+  level:
+    sql: debug

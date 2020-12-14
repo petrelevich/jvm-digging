@@ -50,3 +50,20 @@ create table info_additional
 
 alter table info_additional
     add foreign key (info_main_id) references info_main;
+
+---------------------------------------
+create table owner
+(
+    owner_name varchar(256) primary key,
+    address    varchar(500) not null
+);
+
+create table dog
+(
+    dog_id     bigserial primary key,
+    name       varchar(200) not null,
+    owner_name varchar(256)
+);
+
+alter table dog
+    add foreign key (owner_name) references owner (owner_name);
