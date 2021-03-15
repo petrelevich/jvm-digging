@@ -21,7 +21,6 @@ public class UserDaoImpl implements UserDao {
                 pst.setString(1, name);
                 pst.setString(2, name);
                 pst.executeUpdate();
-                connection.commit();
                 try (var keys = pst.getGeneratedKeys()) {
                     keys.next();
                     var user = new User(keys.getLong(1), name);
