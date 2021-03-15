@@ -1,0 +1,38 @@
+plugins {
+    id "io.spring.dependency-management" version "1.0.11.RELEASE"
+    id 'java'
+}
+
+sourceCompatibility = JavaVersion.VERSION_15
+targetCompatibility = JavaVersion.VERSION_15
+
+repositories {
+    mavenCentral()
+}
+
+apply plugin: "io.spring.dependency-management"
+dependencyManagement {
+    dependencies {
+        imports {
+            mavenBom("org.springframework.boot:spring-boot-dependencies:2.3.1.RELEASE")
+        }
+    }
+}
+
+dependencies {
+    implementation 'ch.qos.logback:logback-classic'
+
+    testImplementation ('org.mockito:mockito-core')
+    testImplementation ('org.mockito:mockito-junit-jupiter')
+
+    testImplementation('org.junit.jupiter:junit-jupiter-api')
+    testImplementation('org.junit.jupiter:junit-jupiter-engine')
+    testImplementation('org.assertj:assertj-core')
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}

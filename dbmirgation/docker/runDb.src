@@ -3,5 +3,5 @@ docker run --rm --name pg-docker \
 -e POSTGRES_USER=usr \
 -e POSTGRES_DB=usersDB \
 -e PGDATA=/var/lib/postgresql/data/pgdata \
--p 5432:5432 \
+-p 5430:5432 \
 postgres:12
