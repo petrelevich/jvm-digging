@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 public class Application {
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
-    private static final String URL = "jdbc:postgresql://localhost:5432/usersDB";
+    private static final String URL = "jdbc:postgresql://localhost:5430/usersDB";
     private static final String USER = "usr";
     private static final String PASSWORD = "pwd";
 
@@ -45,6 +45,7 @@ public class Application {
             logger.info("All users");
             var userList = userDao.selectAll(connection);
             userList.forEach(user -> logger.info("user:{}", user));
+            connection.commit();
         }
     }
 }

@@ -19,7 +19,7 @@ class UserDaoImplTest {
 
     @Test
     @DisplayName("Check user create and select functionality")
-    public void userTest() throws SQLException, InterruptedException {
+    void userTest() throws SQLException {
 
         //given
         var expectedUser = new User(1, "Vasil");

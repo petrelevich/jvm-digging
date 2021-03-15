@@ -1,26 +1,36 @@
 plugins {
     id 'com.github.johnrengelman.shadow' version '5.2.0'
+    id "io.spring.dependency-management" version "1.0.11.RELEASE"
     id 'java'
 }
 
-sourceCompatibility = JavaVersion.VERSION_13
-targetCompatibility = JavaVersion.VERSION_13
+sourceCompatibility = JavaVersion.VERSION_15
+targetCompatibility = JavaVersion.VERSION_15
 
 repositories {
     mavenCentral()
 }
 
+apply plugin: "io.spring.dependency-management"
+dependencyManagement {
+    dependencies {
+        imports {
+            mavenBom("org.springframework.boot:spring-boot-dependencies:2.3.1.RELEASE")
+        }
+    }
+}
+
 dependencies {
-    compile("ch.qos.logback:logback-classic:1.2.3")
-    compile("org.flywaydb:flyway-core:6.4.4")
-    compile("org.postgresql:postgresql:42.2.14")
+    implementation 'ch.qos.logback:logback-classic'
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.postgresql:postgresql'
 
-    testCompile("org.junit.jupiter:junit-jupiter-engine:5.5.2")
-    testCompile("org.assertj:assertj-core:3.13.2")
-    testCompile("org.mockito:mockito-junit-jupiter:3.1.0")
+    testImplementation('org.junit.jupiter:junit-jupiter-api')
+    testImplementation('org.junit.jupiter:junit-jupiter-engine')
+    testImplementation('org.assertj:assertj-core')
 
-    testCompile("org.testcontainers:junit-jupiter:1.13.0")
-    testCompile("org.testcontainers:postgresql:1.13.0")
+    testImplementation("org.testcontainers:junit-jupiter:1.14.3")
+    testImplementation("org.testcontainers:postgresql:1.14.3")
 }
 
 test {

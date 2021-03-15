@@ -20,7 +20,6 @@ public class UserDaoImpl implements UserDao {
             try (var pst = connection.prepareStatement("insert into users(name) values (?)", Statement.RETURN_GENERATED_KEYS)) {
                 pst.setString(1, name);
                 pst.executeUpdate();
-                connection.commit();
                 try (var keys = pst.getGeneratedKeys()) {
                     keys.next();
                     var user = new User(keys.getLong(1), name);
