@@ -55,7 +55,7 @@ class CalculatorAlfaTest {
         var intSourceX = 7;
 
         var calculator = new CalculatorAlfa();
-        var intSource = mock(IntSourceImpl.class);
+        var intSource = mock(IntSource.class);
         when(intSource.getInt()).thenReturn(intSourceX);
 
         var expected = x1 + x2 + intSourceX;
