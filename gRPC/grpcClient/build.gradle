@@ -1,0 +1,68 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id "com.google.protobuf"
+    id 'com.github.johnrengelman.shadow'
+}
+
+sourceCompatibility = JavaVersion.VERSION_15
+targetCompatibility = JavaVersion.VERSION_15
+
+dependencies {
+    implementation 'ch.qos.logback:logback-classic'
+
+    implementation 'io.grpc:grpc-netty-shaded'
+    implementation 'io.grpc:grpc-protobuf'
+    implementation 'io.grpc:grpc-stub'
+    implementation 'org.apache.tomcat:annotations-api'
+
+    implementation project(':common')
+}
+
+def protoSrcDir = 'build/generated/sources/proto/main/java'
+def grpcSrcDir = 'build/generated/sources/proto/main/grpc'
+
+idea {
+    module {
+        sourceDirs += file(protoSrcDir)
+        sourceDirs += file(grpcSrcDir)
+    }
+}
+
+sourceSets {
+    main {
+        proto {
+            srcDir protoSrcDir
+        }
+        java {
+            srcDir grpcSrcDir
+        }
+    }
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.12.0"
+    }
+    plugins {
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.35.0'
+        }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+        }
+    }
+}
+
+shadowJar {
+    archiveBaseName.set('grpcClient')
+    archiveVersion.set('0.1')
+    archiveClassifier.set('')
+    manifest {
+        attributes 'Main-Class': 'ru.demo.NumbersClient'
+    }
+}
+
+tasks.build.dependsOn tasks.shadowJar

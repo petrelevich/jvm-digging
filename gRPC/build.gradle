@@ -1,0 +1,59 @@
+plugins {
+    //support Idea IDE
+    id 'idea'
+    id "io.spring.dependency-management" version "1.0.10.RELEASE"
+    // Build uber-jar
+    id 'com.github.johnrengelman.shadow' version '6.0.0' apply false
+    id "com.google.protobuf" version "0.8.14" apply false
+}
+
+idea {
+    project {
+        languageLevel = 15
+    }
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+allprojects {
+    group "demo.grpc"
+
+    repositories {
+        mavenCentral()
+    }
+
+    apply plugin: "io.spring.dependency-management"
+    dependencyManagement {
+        dependencies {
+            imports {
+                mavenBom("org.springframework.boot:spring-boot-dependencies:2.4.1")
+            }
+            dependency("io.grpc:grpc-netty-shaded:${Versions.grpc}")
+            dependency("io.grpc:grpc-protobuf:${Versions.grpc}")
+            dependency("io.grpc:grpc-stub:${Versions.grpc}")
+            dependency("org.apache.tomcat:annotations-api:${Versions.tomcat_annotations_api}")
+        }
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            failOnVersionConflict()
+        }
+    }
+}
+
+//print versions from BOM
+task managedVersions {
+    doLast {
+        dependencyManagement.managedVersions.each {
+            println it
+        }
+    }
+}
+
+//gradle -q hello
+task hello {
+    println 'Hello world!'
+}
