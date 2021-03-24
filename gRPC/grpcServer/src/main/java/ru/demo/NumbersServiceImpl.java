@@ -24,15 +24,6 @@ public class NumbersServiceImpl extends NumbersServiceGrpc.NumbersServiceImplBas
 
         Runnable task = () -> {
             var value = currentValue.incrementAndGet();
-/*
-            if (value == 10) {
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-*/
             var response = NumberResponse.newBuilder().setNumber(value).build();
             responseObserver.onNext(response);
             if (value == request.getLastValue()) {
