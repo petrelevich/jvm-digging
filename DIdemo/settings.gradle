@@ -1,0 +1,4 @@
+rootProject.name = 'DIdemo'
+include 'hardCoded'
+include 'sericeLocator'
+include 'ioc'
