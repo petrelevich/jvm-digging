@@ -1,0 +1,4 @@
+rootProject.name = 'gradleDemo'
+include 'overVersions'
+include 'libApi'
+include 'libApiUse'

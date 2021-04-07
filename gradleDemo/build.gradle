@@ -1,0 +1,63 @@
+plugins {
+    //support Idea IDE
+    id 'idea'
+    id "io.spring.dependency-management" version "1.0.10.RELEASE"
+    // Build uber-jar
+    id 'com.github.johnrengelman.shadow' version '6.1.0' apply false
+}
+
+idea {
+    project {
+        languageLevel = 15
+    }
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+allprojects {
+    group "ru.demo"
+
+    repositories {
+        mavenCentral()
+    }
+
+    apply plugin: "io.spring.dependency-management"
+    dependencyManagement {
+        dependencies {
+            imports {
+                mavenBom("org.springframework.boot:spring-boot-dependencies:2.4.4")
+            }
+            dependency("com.google.guava:guava:${Versions.guava}")
+        }
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            failOnVersionConflict()
+        }
+        resolutionStrategy {
+            force("javax.servlet:servlet-api:2.4")
+            force("commons-logging:commons-logging:1.1.1")
+            force("commons-lang:commons-lang:2.5")
+            force("org.codehaus.jackson:jackson-core-asl:1.8.8")
+            force("org.codehaus.jackson:jackson-mapper-asl:1.8.3")
+            force("org.codehaus.jettison:jettison:1.1")
+        }
+    }
+}
+
+//print versions from BOM
+task managedVersions {
+    doLast {
+        dependencyManagement.managedVersions.each {
+            println it
+        }
+    }
+}
+
+//gradle -q hello
+task hello {
+    println 'Hello world!'
+}

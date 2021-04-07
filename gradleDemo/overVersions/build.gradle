@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow'
+}
+
+sourceCompatibility = JavaVersion.VERSION_15
+targetCompatibility = JavaVersion.VERSION_15
+
+dependencies {
+    implementation 'com.google.guava:guava'
+    implementation 'com.zaxxer:HikariCP'
+
+    implementation("org.springframework.data:spring-data-hadoop:2.0.0.RELEASE")
+    implementation("org.springframework:spring-tx:3.2.3.RELEASE")
+}
+
+shadowJar {
+    archiveBaseName.set('gradleHelloWorld')
+    archiveVersion.set('0.1')
+    archiveClassifier.set('')
+    manifest {
+        attributes 'Main-Class': 'ru.demo.App'
+    }
+}
+
+tasks.build.dependsOn tasks.shadowJar
