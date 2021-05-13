@@ -1,7 +1,6 @@
 plugins {
     //support Idea IDE
     id 'idea'
-    id "io.spring.dependency-management" version "1.0.10.RELEASE"
 }
 
 idea {
@@ -17,27 +16,6 @@ idea {
 allprojects {
     group "ru.demo"
 
-    repositories {
-        mavenCentral()
-    }
 
-    apply plugin: "io.spring.dependency-management"
-    dependencyManagement {
-        dependencies {
-            imports {
-                mavenBom("org.springframework.boot:spring-boot-dependencies:2.3.1.RELEASE")
-            }
-        }
-    }
-
-}
-
-//print versions from BOM
-task managedVersions {
-    doLast {
-        dependencyManagement.managedVersions.each {
-            println it
-        }
-    }
 }
 
