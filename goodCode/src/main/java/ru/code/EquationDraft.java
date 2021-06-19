@@ -13,7 +13,7 @@ public class EquationDraft {
         double a = 1;
         double b = 7;
         double c = 6;
-        double[] result = calcRoots(a, b, c);
+        double[] result = calc(a, b, c);
         System.out.println(Arrays.toString(result));
 
         double check1 = a * result[0] * result[0] + b * result[0] + c;
@@ -31,7 +31,7 @@ public class EquationDraft {
         double a = 2;
         double b = 7;
         double c = -4;
-        double[] result = calcRoots(a, b, c);
+        double[] result = calc(a, b, c);
         System.out.println(Arrays.toString(result));
 
         double check1 = a * result[0] * result[0] + b * result[0] + c;
@@ -51,13 +51,13 @@ public class EquationDraft {
         double c = 4;
 
         try {
-            calcRoots(a, b, c);
+            calc(a, b, c);
             throw new AssertionError("wrong result");
         } catch (IllegalArgumentException ex) {
         }
     }
 
-    public static double[] calcRoots(double a, double b, double c) {
+    public static double[] calc(double a, double b, double c) {
         if (b * b - 4 * a * c < 0) {
             throw new IllegalArgumentException("error");
         }
