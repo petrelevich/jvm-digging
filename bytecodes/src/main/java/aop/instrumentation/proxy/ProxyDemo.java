@@ -1,4 +1,4 @@
-package instrumentation.proxy;
+package aop.instrumentation.proxy;
 
 
 /*
@@ -7,8 +7,7 @@ package instrumentation.proxy;
 public class ProxyDemo {
 
     public static void main(String[] args) {
-        MyClassImpl myClass = new MyClassImpl();
+        var myClass = new MyClassImpl();
         myClass.secureAccess("Security Param");
     }
-
 }

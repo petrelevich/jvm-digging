@@ -1,4 +1,4 @@
-package instrumentation.proxy;
+package aop.instrumentation.proxy;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
@@ -19,10 +19,6 @@ import java.security.ProtectionDomain;
 
 import static org.objectweb.asm.Opcodes.H_INVOKESTATIC;
 
-/**
- * @author sergey
- * created on 24.04.19.
- */
 public class Agent {
     public static void premain(String agentArgs, Instrumentation inst) {
         System.out.println("premain");
@@ -32,7 +28,7 @@ public class Agent {
                                     Class<?> classBeingRedefined,
                                     ProtectionDomain protectionDomain,
                                     byte[] classfileBuffer) {
-                if (className.equals("instrumentation/proxy/MyClassImpl")) {
+                if (className.equals("aop/instrumentation/proxy/MyClassImpl")) {
                     return addProxyMethod(classfileBuffer);
                 }
                 return classfileBuffer;
@@ -42,13 +38,15 @@ public class Agent {
     }
 
     private static byte[] addProxyMethod(byte[] originalClass) {
-        ClassReader cr = new ClassReader(originalClass);
-        ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS);
+        var originalMethodName = "secureAccess";
+        var proxiedMethodName = "secureAccessProxied";
+        var cr = new ClassReader(originalClass);
+        var cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS);
         ClassVisitor cv = new ClassVisitor(Opcodes.ASM5, cw) {
             @Override
             public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
-                if (name.equals("secureAccess")) {
-                    return super.visitMethod(access, "secureAccessProxied", descriptor, signature, exceptions);
+                if (name.equals(originalMethodName)) {
+                    return super.visitMethod(access, proxiedMethodName, descriptor, signature, exceptions);
                 } else {
                     return super.visitMethod(access, name, descriptor, signature, exceptions);
                 }
@@ -56,9 +54,9 @@ public class Agent {
         };
         cr.accept(cv, Opcodes.ASM5);
 
-        MethodVisitor mv = cw.visitMethod(Opcodes.ACC_PUBLIC, "secureAccess", "(Ljava/lang/String;)V", null, null);
+        MethodVisitor mv = cw.visitMethod(Opcodes.ACC_PUBLIC, originalMethodName, "(Ljava/lang/String;)V", null, null);
 
-        Handle handle = new Handle(
+        var handle = new Handle(
                 H_INVOKESTATIC,
                 Type.getInternalName(java.lang.invoke.StringConcatFactory.class),
                 "makeConcatWithConstants",
@@ -73,21 +71,19 @@ public class Agent {
 
         mv.visitVarInsn(Opcodes.ALOAD, 0);
         mv.visitVarInsn(Opcodes.ALOAD, 1);
-        mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "instrumentation/proxy/MyClassImpl", "secureAccessProxied", "(Ljava/lang/String;)V", false);
+        mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "aop/instrumentation/proxy/MyClassImpl", proxiedMethodName, "(Ljava/lang/String;)V", false);
 
         mv.visitInsn(Opcodes.RETURN);
         mv.visitMaxs(0, 0);
         mv.visitEnd();
 
-
         byte[] finalClass = cw.toByteArray();
 
-        try (OutputStream fos = new FileOutputStream("proxy.class")) {
+        try (OutputStream fos = new FileOutputStream("proxyASM.class")) {
             fos.write(finalClass);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return finalClass;
     }
-
 }

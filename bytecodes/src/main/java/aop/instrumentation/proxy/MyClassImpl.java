@@ -1,8 +1,7 @@
-package instrumentation.proxy;
+package aop.instrumentation.proxy;
 
 
-
-public class MyClassImpl {
+public final class MyClassImpl {
 
     public void secureAccess(String param) {
         System.out.println("secureAccess, param:" + param);

@@ -1,4 +1,4 @@
-package instrumentation.setter;
+package aop.instrumentation.setter;
 
 
 public class MyClass {

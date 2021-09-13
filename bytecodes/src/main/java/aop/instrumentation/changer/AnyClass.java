@@ -1,4 +1,4 @@
-package instrumentation.changer;
+package aop.instrumentation.changer;
 
 public class AnyClass {
     public int summator(int x, int y) {

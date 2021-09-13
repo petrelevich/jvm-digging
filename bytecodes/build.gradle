@@ -1,0 +1,60 @@
+plugins {
+    id 'idea'
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+}
+
+idea {
+    project {
+        languageLevel = 15
+    }
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+group "ru.petrelevich"
+
+sourceCompatibility = JavaVersion.VERSION_15
+targetCompatibility = JavaVersion.VERSION_15
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.ow2.asm:asm-commons:9.1'
+}
+
+task shadowSetterDemo(type: Jar, dependsOn: shadowJar) {
+    archiveBaseName.set('setterDemo')
+    manifest {
+        attributes 'Main-Class': 'aop.instrumentation.setter.SetterDemo'
+        attributes 'Premain-Class': 'aop.instrumentation.setter.Agent'
+    }
+    from zipTree(shadowJar.archiveFile)
+}
+
+task shadowProxyDemo(type: Jar, dependsOn: shadowJar) {
+    archiveBaseName.set('proxyDemo')
+    manifest {
+        attributes 'Main-Class': 'aop.instrumentation.proxy.ProxyDemo'
+        attributes 'Premain-Class': 'aop.instrumentation.proxy.Agent'
+    }
+    from zipTree(shadowJar.archiveFile)
+}
+
+task shadowSummatorDemo(type: Jar, dependsOn: shadowJar) {
+    archiveBaseName.set('summatorDemo')
+    manifest {
+        attributes 'Main-Class': 'aop.instrumentation.changer.SummatorDemo'
+        attributes 'Premain-Class': 'aop.instrumentation.changer.Agent'
+    }
+    from zipTree(shadowJar.archiveFile)
+}
+
+tasks.build.dependsOn tasks.shadowSetterDemo
+tasks.build.dependsOn tasks.shadowProxyDemo
+tasks.build.dependsOn tasks.shadowSummatorDemo
