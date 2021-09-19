@@ -1,0 +1,60 @@
+plugins {
+    id 'java'
+    //support Idea IDE
+    id 'idea'
+    id "io.spring.dependency-management" version "1.0.11.RELEASE"
+    // Build uber-jar
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
+}
+
+sourceCompatibility = JavaVersion.VERSION_15
+targetCompatibility = JavaVersion.VERSION_15
+
+idea {
+    project {
+        languageLevel = 15
+    }
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.boot:spring-boot-dependencies:2.5.4'
+    }
+}
+
+dependencies {
+    implementation 'com.google.guava:guava:30.1.1-jre'
+    implementation 'ch.qos.logback:logback-classic'
+}
+
+shadowJar {
+    archiveBaseName.set('gradleHelloWorld')
+    archiveVersion.set('0.1')
+    archiveClassifier.set('')
+    manifest {
+        attributes 'Main-Class': 'ru.demo.Application'
+    }
+}
+
+tasks.build.dependsOn tasks.shadowJar
+
+//print versions from BOM
+task managedVersions {
+    doLast {
+        dependencyManagement.managedVersions.each {
+            println it
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
