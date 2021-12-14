@@ -6,7 +6,7 @@ plugins {
 
 idea {
     project {
-        languageLevel = 15
+        languageLevel = 17
     }
     module {
         downloadJavadoc = true
@@ -16,8 +16,8 @@ idea {
 
 group "ru.petrelevich"
 
-sourceCompatibility = JavaVersion.VERSION_15
-targetCompatibility = JavaVersion.VERSION_15
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 repositories {
     mavenLocal()

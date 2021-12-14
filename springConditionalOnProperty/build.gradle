@@ -1,15 +1,15 @@
 plugins {
     id 'idea'
     id 'java'
-    id 'org.springframework.boot' version '2.3.4.RELEASE'
+    id 'org.springframework.boot' version '2.6.1'
 }
 
-sourceCompatibility = JavaVersion.VERSION_15
-targetCompatibility = JavaVersion.VERSION_15
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 idea {
     project {
-        languageLevel = 15
+        languageLevel = 17
     }
     module {
         downloadJavadoc = true
@@ -22,5 +22,5 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter:2.3.4.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter:2.6.1'
 }
