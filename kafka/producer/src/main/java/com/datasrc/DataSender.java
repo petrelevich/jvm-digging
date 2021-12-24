@@ -28,12 +28,12 @@ public class DataSender {
         log.info("value:{}", value);
         try {
             var valueAsString = mapper.writeValueAsString(value);
-            myProducer.getMyProducer().send(new ProducerRecord<>(TOPIC_NAME, String.valueOf(value.getId()), valueAsString),
+            myProducer.getMyProducer().send(new ProducerRecord<>(TOPIC_NAME, String.valueOf(value.id()), valueAsString),
                     (metadata, exception) -> {
                         if (exception != null) {
                             log.error("message wasn't sent", exception);
                         } else {
-                            log.info("message id:{} was sent, offset:{}", value.getId(), metadata.offset());
+                            log.info("message id:{} was sent, offset:{}", value.id(), metadata.offset());
                             sendAsk.accept(value);
                         }
                     });
