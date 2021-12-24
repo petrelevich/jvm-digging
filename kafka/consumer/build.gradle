@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.6.1'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+}
+
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+def testcontainers_version = "1.16.2";
+
+dependencies {
+    implementation 'org.apache.kafka:kafka-clients:3.0.0'
+    implementation 'ch.qos.logback:logback-classic'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine'
+    testImplementation 'org.assertj:assertj-core'
+    testImplementation 'org.mockito:mockito-junit-jupiter'
+
+    testImplementation "org.testcontainers:junit-jupiter:${testcontainers_version}"
+    testImplementation "org.testcontainers:kafka:${testcontainers_version}"
+}
+
+
+
+configurations.all {
+    resolutionStrategy {
+        failOnVersionConflict()
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
