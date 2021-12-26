@@ -52,12 +52,12 @@ class StringValueConsumerTest {
         var dataConsumer = new StringValueConsumer(myConsumer, factStringValues::add);
 
         //when
-        CompletableFuture.runAsync(dataConsumer::dataHandler);
+        CompletableFuture.runAsync(dataConsumer::startSending);
 
         //then
         await().atMost(30, TimeUnit.SECONDS).until(() -> factStringValues.size() == stringValues.size());
         assertThat(factStringValues).hasSameElementsAs(stringValues);
-        dataConsumer.setStopFlag(true);
+        dataConsumer.stopSending();
     }
 
     private void putValuesToKafka(List<StringValue> stringValues) throws JsonProcessingException {
