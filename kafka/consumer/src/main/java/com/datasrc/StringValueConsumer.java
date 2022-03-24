@@ -1,9 +1,6 @@
 package com.datasrc;
 
 
-import com.fasterxml.jackson.core.JacksonException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.slf4j.Logger;
@@ -21,7 +18,6 @@ import static com.datasrc.MyConsumer.MAX_POLL_INTERVAL_MS;
 public class StringValueConsumer {
     private static final Logger log = LoggerFactory.getLogger(StringValueConsumer.class);
 
-    private final ObjectMapper mapper = new ObjectMapper();
     private final MyConsumer myConsumer;
     private final Duration timeout = Duration.ofMillis(2_000);
     private final Consumer<StringValue> dataConsumer;
@@ -38,16 +34,16 @@ public class StringValueConsumer {
 
     private void poll() {
         log.info("poll records");
-        ConsumerRecords<String, String> records = myConsumer.getConsumer().poll(timeout);
+        ConsumerRecords<Long, StringValue> records = myConsumer.getConsumer().poll(timeout);
        // sleep();
         log.info("polled records.counter:{}", records.count());
-        for (ConsumerRecord<String, String> kafkaRecord : records) {
+        for (ConsumerRecord<Long, StringValue> kafkaRecord : records) {
             try {
-                var key = mapper.readValue(kafkaRecord.key(), Long.class);
-                var value = mapper.readValue(kafkaRecord.value(), StringValue.class);
+                var key = kafkaRecord.key();
+                var value = kafkaRecord.value();
                 log.info("key:{}, value:{}, record:{}", key, value, kafkaRecord);
                 dataConsumer.accept(value);
-            } catch (JsonProcessingException ex) {
+            } catch (Exception ex) {
                 log.error("can't parse record:{}", kafkaRecord, ex);
             }
         }

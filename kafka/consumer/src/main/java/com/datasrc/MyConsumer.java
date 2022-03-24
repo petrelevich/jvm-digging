@@ -1,7 +1,9 @@
 package com.datasrc;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.serialization.LongDeserializer;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -10,6 +12,7 @@ import java.util.Properties;
 import java.util.Random;
 
 
+import static com.datasrc.StringValueDeserializer.OBJECT_MAPPER;
 import static org.apache.kafka.clients.CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG;
 import static org.apache.kafka.clients.CommonClientConfigs.GROUP_ID_CONFIG;
 import static org.apache.kafka.clients.CommonClientConfigs.GROUP_INSTANCE_ID_CONFIG;
@@ -23,7 +26,7 @@ import static org.apache.kafka.clients.consumer.ConsumerConfig.VALUE_DESERIALIZE
 
 
 public class MyConsumer {
-    private final KafkaConsumer<String, String> kafkaConsumer;
+    private final KafkaConsumer<Long, StringValue> kafkaConsumer;
 
     public static final String TOPIC_NAME = "MyTopic";
     public static final String GROUP_ID_CONFIG_NAME ="myKafkaConsumerGroup";
@@ -37,8 +40,9 @@ public class MyConsumer {
         props.put(ENABLE_AUTO_COMMIT_CONFIG, "true");
         props.put(AUTO_COMMIT_INTERVAL_MS_CONFIG, "100");
         props.put(AUTO_OFFSET_RESET_CONFIG, "earliest");
-        props.put(KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
-        props.put(VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
+        props.put(KEY_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class);
+        props.put(VALUE_DESERIALIZER_CLASS_CONFIG, StringValueDeserializer.class);
+        props.put(OBJECT_MAPPER, new ObjectMapper());
 
        // props.put(MAX_POLL_RECORDS_CONFIG, 3);
        // props.put(MAX_POLL_INTERVAL_MS_CONFIG, MAX_POLL_INTERVAL_MS);
@@ -47,7 +51,7 @@ public class MyConsumer {
         kafkaConsumer.subscribe(Collections.singletonList(TOPIC_NAME));
     }
 
-    public KafkaConsumer<String, String> getConsumer() {
+    public KafkaConsumer<Long, StringValue> getConsumer() {
         return kafkaConsumer;
     }
 
