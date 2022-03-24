@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Properties;
 
 
-import static com.datasrc.StringValueSerializer.OBJECT_MAPPER;
+import static com.datasrc.JsonSerializer.OBJECT_MAPPER;
 import static org.apache.kafka.clients.CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG;
 import static org.apache.kafka.clients.CommonClientConfigs.CLIENT_ID_CONFIG;
 import static org.apache.kafka.clients.CommonClientConfigs.RETRIES_CONFIG;
@@ -40,7 +40,7 @@ public class MyProducer {
         props.put(BUFFER_MEMORY_CONFIG, 33_554_432); //bytes
         props.put(MAX_BLOCK_MS_CONFIG, 1_000); //ms
         props.put(KEY_SERIALIZER_CLASS_CONFIG, LongSerializer.class);
-        props.put(VALUE_SERIALIZER_CLASS_CONFIG, StringValueSerializer.class);
+        props.put(VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         props.put(OBJECT_MAPPER, new ObjectMapper());
 
         kafkaProducer = new KafkaProducer<>(props);

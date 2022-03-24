@@ -7,7 +7,7 @@ import org.apache.kafka.common.serialization.Serializer;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-public class StringValueSerializer implements Serializer<StringValue> {
+public class JsonSerializer<T> implements Serializer<T> {
     public static final String OBJECT_MAPPER = "objectMapper";
     private final String encoding = StandardCharsets.UTF_8.name();
     private ObjectMapper mapper;
@@ -21,7 +21,7 @@ public class StringValueSerializer implements Serializer<StringValue> {
     }
 
     @Override
-    public byte[] serialize(String topic, StringValue data) {
+    public byte[] serialize(String topic, T data) {
         try {
             if (data == null) {
                 return null;
