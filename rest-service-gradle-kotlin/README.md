@@ -1,1 +1,1 @@
-# gitlab Hello
+# Gradle plugin usage example
