@@ -63,6 +63,10 @@ class BasePlugin : Plugin<Project> {
 
                 force("net.java.dev.jna:jna:5.8.0")
                 force("org.ow2.asm:asm:9.1")
+                force("org.checkerframework:dataflow-errorprone:3.22.0")
+                force("com.google.errorprone:error_prone_annotations:2.13.1")
+                force("org.checkerframework:checker-qual:3.19.0")
+                force("com.google.guava:guava:31.0.1-jre")
             }
         }
     }
