@@ -11,6 +11,8 @@ import org.springframework.http.client.reactive.ReactorResourceFactory;
 
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicLong;
+import reactor.core.scheduler.Scheduler;
+import reactor.core.scheduler.Schedulers;
 
 @Configuration
 public class ApplConfig {
@@ -58,4 +60,10 @@ public class ApplConfig {
     public ReactorClientHttpConnector reactorClientHttpConnector(ReactorResourceFactory resourceFactory) {
         return new ReactorClientHttpConnector(resourceFactory, mapper -> mapper);
     }
+
+    @Bean
+    public Scheduler timer() {
+        return Schedulers.newParallel("processor-thread", 2);
+    }
+
 }
