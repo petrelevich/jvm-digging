@@ -21,9 +21,7 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter-engine'
     testImplementation 'org.assertj:assertj-core'
-    testImplementation 'org.mockito:mockito-junit-jupiter'
 
-    testImplementation "org.testcontainers:junit-jupiter:${testcontainers_version}"
     testImplementation "org.testcontainers:kafka:${testcontainers_version}"
 }
 

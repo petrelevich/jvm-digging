@@ -3,14 +3,6 @@ package com.datasrc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.kafka.clients.admin.NewTopic;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
@@ -19,7 +11,16 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.LongStream;
+import org.apache.kafka.clients.admin.NewTopic;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.serialization.LongSerializer;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import static com.datasrc.JsonSerializer.OBJECT_MAPPER;
 import static com.datasrc.MyConsumer.TOPIC_NAME;
 import static org.apache.kafka.clients.CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG;
 import static org.apache.kafka.clients.CommonClientConfigs.CLIENT_ID_CONFIG;
@@ -66,16 +67,15 @@ class StringValueConsumerTest {
         props.put(BOOTSTRAP_SERVERS_CONFIG, KafkaBase.getBootstrapServers());
         props.put(ACKS_CONFIG, "0");
         props.put(LINGER_MS_CONFIG, 1);
-        props.put(KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
-        props.put(VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
-
-        var mapper = new ObjectMapper();
-        var kafkaProducer = new KafkaProducer<>(props);
+        props.put(KEY_SERIALIZER_CLASS_CONFIG, LongSerializer.class);
+        props.put(VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        props.put(OBJECT_MAPPER, new ObjectMapper());
 
         log.info("sending values, counter:{}", stringValues.size());
-        for(var value: stringValues) {
-            var valueAsString = mapper.writeValueAsString(value);
-            kafkaProducer.send(new ProducerRecord<>(TOPIC_NAME, String.valueOf(value.id()), valueAsString));
+        try (var kafkaProducer = new KafkaProducer<Long, StringValue>(props)) {
+            for (var value : stringValues) {
+                kafkaProducer.send(new ProducerRecord<>(TOPIC_NAME, value.id(), value));
+            }
         }
         log.info("done");
     }
