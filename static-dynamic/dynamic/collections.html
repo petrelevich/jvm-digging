@@ -1,0 +1,20 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="ru">
+<head>
+    <title>Function arguments</title>
+    <script src="js/Collections.js" type="application/javascript"></script>
+    <script type="text/JavaScript">
+        function showMsg() {
+            const arrayVal = getArray()
+            document.getElementById("msg1").innerHTML = arrayVal
+            document.getElementById("msg2").innerHTML = arrayVal[3]
+        }
+    </script>
+</head>
+<body onload="showMsg();">
+<div id="msg1"></div>
+<div id="msg2"></div>
+</body>
+
+</html>
