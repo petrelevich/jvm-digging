@@ -7,6 +7,7 @@ import org.springframework.boot.web.embedded.netty.NettyReactiveWebServerFactory
 import org.springframework.boot.web.reactive.server.ReactiveWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import reactor.core.scheduler.NonBlocking;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 import reactor.util.annotation.NonNull;
@@ -21,10 +22,8 @@ public class ApplConfig {
                 new ThreadFactory() {
                     private final AtomicLong threadIdGenerator = new AtomicLong(0);
                     @Override
-                    public Thread newThread(@NonNull Runnable task) {
-                        var thread = new Thread(task);
-                        thread.setName("server-thread-" + threadIdGenerator.incrementAndGet());
-                        return thread;
+                    public NonBlockingThread newThread(@NonNull Runnable task) {
+                        return new NonBlockingThread(task, "server-thread-" + threadIdGenerator.incrementAndGet());
                     }
                 });
 
@@ -34,8 +33,15 @@ public class ApplConfig {
         return factory;
     }
 
-    @Bean
+    @Bean(destroyMethod = "dispose")
     public Scheduler blockingPool() {
-        return Schedulers.newParallel("blocking-thread", 10);
+        return Schedulers.newBoundedElastic(10, 100, "blocking-thread", 20, false);
+    }
+
+
+    public static class NonBlockingThread extends Thread implements NonBlocking {
+        public NonBlockingThread(Runnable target, String name) {
+            super(target, name);
+        }
     }
 }

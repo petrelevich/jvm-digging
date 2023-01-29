@@ -26,6 +26,11 @@ dependencyManagement {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.assertj:assertj-core")
+    testImplementation("io.projectreactor.tools:blockhound:1.0.7.RELEASE")
+    testImplementation("io.projectreactor:reactor-test:3.5.2")
 }
 
 tasks {
@@ -35,4 +40,9 @@ tasks {
     compileTestJava {
         options.encoding = "UTF-8"
     }
+}
+
+tasks.withType<Test> {
+    jvmArgs = listOf("-XX:+AllowRedefinitionToAddDeleteMethods")
+    useJUnitPlatform()
 }

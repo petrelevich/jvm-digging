@@ -22,7 +22,10 @@ public class ClientDataController {
 
     @GetMapping(value = "/data/{value}")
     public Mono<String> data(@PathVariable("value") long value) {
-        return Mono.fromCallable(() -> String.format("%d%n", longProviderService.get(value)))
-                .publishOn(workerPool);
+        return Mono.fromCallable(() -> String.format("%d%n", longProviderService.get(value)));
+
+
+//        return Mono.fromCallable(() -> String.format("%d%n", longProviderService.get(value)))
+//                .publishOn(workerPool);
     }
 }
