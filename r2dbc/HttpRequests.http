@@ -1,0 +1,30 @@
+###
+GET http://localhost:8080/expenses/1
+Accept: */*
+Content-Type: application/json
+Cache-Control: no-cache
+
+###
+GET http://localhost:8080/expenses
+Accept: */*
+Content-Type: application/json
+Cache-Control: no-cache
+
+
+###
+GET http://localhost:8080/expenses-value/1
+Accept: */*
+Content-Type: application/json
+Cache-Control: no-cache
+
+###
+POST http://localhost:8080/expenses
+Accept: */*
+Content-Type: application/json
+Cache-Control: no-cache
+
+{
+  "expensesSum": 44.34,
+  "expensesComment": "comment food",
+  "expensesDate": "2023-01-30"
+}

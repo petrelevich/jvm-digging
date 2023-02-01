@@ -1,0 +1,5 @@
+database:
+  url-r2dbc: r2dbc:postgresql://localhost:5430/demoDB
+  url-jdbc: jdbc:postgresql://localhost:5430/demoDB
+  username: usr
+  password: pwd
