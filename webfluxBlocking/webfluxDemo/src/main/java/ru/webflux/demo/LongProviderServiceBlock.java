@@ -12,7 +12,7 @@ public class LongProviderServiceBlock implements LongProviderService {
     public long get(long value) {
         log.info("get request, value:{}", value);
         try {
-            Thread.sleep(TimeUnit.SECONDS.toMillis(10));
+            Thread.sleep(TimeUnit.SECONDS.toMillis(value));
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }

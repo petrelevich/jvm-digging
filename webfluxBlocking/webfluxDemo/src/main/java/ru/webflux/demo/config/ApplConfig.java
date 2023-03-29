@@ -26,16 +26,19 @@ public class ApplConfig {
                         return new NonBlockingThread(task, "server-thread-" + threadIdGenerator.incrementAndGet());
                     }
                 });
-
         var factory = new NettyReactiveWebServerFactory();
         factory.addServerCustomizers(builder -> builder.runOn(eventLoopGroup));
-
         return factory;
     }
 
     @Bean(destroyMethod = "dispose")
     public Scheduler blockingPool() {
-        return Schedulers.newBoundedElastic(10, 100, "blocking-thread", 20, false);
+        return Schedulers.newBoundedElastic(
+                10,
+                100,
+                "blocking-thread",
+                20,
+                false);
     }
 
 

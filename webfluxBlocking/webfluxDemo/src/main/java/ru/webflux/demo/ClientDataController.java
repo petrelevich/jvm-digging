@@ -13,19 +13,28 @@ public class ClientDataController {
 
     private final LongProviderService longProviderService;
 
-    private final Scheduler workerPool;
+    private final Scheduler blockingPool;
 
-    public ClientDataController(LongProviderService longProviderService, Scheduler workerPool) {
+    public ClientDataController(LongProviderService longProviderService, Scheduler blockingPool) {
         this.longProviderService = longProviderService;
-        this.workerPool = workerPool;
+        this.blockingPool = blockingPool;
     }
 
     @GetMapping(value = "/data/{value}")
     public Mono<String> data(@PathVariable("value") long value) {
         return Mono.fromCallable(() -> String.format("%d%n", longProviderService.get(value)));
+    }
 
-
-//        return Mono.fromCallable(() -> String.format("%d%n", longProviderService.get(value)))
-//                .publishOn(workerPool);
+    @GetMapping(value = "/dataReact/{value}")
+    public Mono<String> dataReact(@PathVariable("value") long value) {
+        return Mono.fromCallable(() -> String.format("%d%n", value));
     }
 }
+
+/*
+    @GetMapping(value = "/data/{value}")
+    public Mono<String> data(@PathVariable("value") long value) {
+        return Mono.fromCallable(() -> String.format("%d%n", longProviderService.get(value)))
+                .publishOn(blockingPool);
+    }
+ */

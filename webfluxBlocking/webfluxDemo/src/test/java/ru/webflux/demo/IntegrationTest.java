@@ -32,7 +32,6 @@ class IntegrationTest extends BaseTest {
         StepVerifier.create(mono)
                 .expectErrorMatches(error -> error instanceof BlockingOperationError)
                 .verify();
-         //.verifyComplete();
     }
 
     @Test
@@ -46,6 +45,29 @@ class IntegrationTest extends BaseTest {
         //when
         var result = webTestClientForTest
                 .get().uri(String.format("/data/%d", value))
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .returnResult(String.class)
+                .getResponseBody();
+
+        //then
+        StepVerifier.create(result)
+                .expectNext(String.format("%d", value))
+                .verifyComplete();
+    }
+
+    @Test
+    void dataTestReact() {
+        //given
+        var value = 12;
+        var webTestClientForTest = webTestClient.mutate()
+                .responseTimeout(Duration.ofSeconds(20))
+                .build();
+
+        //when
+        var result = webTestClientForTest
+                .get().uri(String.format("/dataReact/%d", value))
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
