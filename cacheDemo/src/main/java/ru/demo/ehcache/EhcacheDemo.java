@@ -45,9 +45,9 @@ public class EhcacheDemo {
 
     private void start() {
         logger.info("first getting...");
-        IntStream.range(1, 10).forEach(val -> logger.info("value: {}", this.getValue(val)));
+        IntStream.range(1, 10).forEach(val -> logger.info("value: {}", getValue(val)));
         logger.info("second getting...");
-        IntStream.range(1, 10).map(i -> 10 - i).forEach(val -> logger.info("value: {}", this.getValue(val)));
+        IntStream.range(1, 10).map(i -> 10 - i).forEach(val -> logger.info("value: {}", getValue(val)));
 
         printAll();
         closeEhcache();
@@ -72,6 +72,6 @@ public class EhcacheDemo {
     }
 
     private void closeEhcache() {
-        this.cacheManager.close();
+        cacheManager.close();
     }
 }
