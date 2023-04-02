@@ -1,6 +1,5 @@
 package ru.demo.caffeine;
 
-
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.RemovalCause;
@@ -19,12 +18,18 @@ public class CaffeineDemo {
     }
 
     public CaffeineDemo() {
-        cache = Caffeine.newBuilder()
-                .maximumSize(5)
-                .expireAfterWrite(Duration.ofMinutes(60))
-                .removalListener((Integer key, Long value, RemovalCause cause) ->
-                        logger.info("Key:{} was removed, value:{}, cause:{}", key, value, cause))
-                .build();
+        cache =
+                Caffeine.newBuilder()
+                        .maximumSize(5)
+                        .expireAfterWrite(Duration.ofMinutes(60))
+                        .removalListener(
+                                (Integer key, Long value, RemovalCause cause) ->
+                                        logger.info(
+                                                "Key:{} was removed, value:{}, cause:{}",
+                                                key,
+                                                value,
+                                                cause))
+                        .build();
         logger.info("Cache setup is done");
     }
 
@@ -32,14 +37,16 @@ public class CaffeineDemo {
         logger.info("first getting...");
         IntStream.range(1, 10).forEach(val -> logger.info("value: {}", getValue(val)));
         logger.info("second getting...");
-        IntStream.range(1, 10).map(i -> 10 - i).forEach(val -> logger.info("value: {}", getValue(val)));
+        IntStream.range(1, 10)
+                .map(i -> 10 - i)
+                .forEach(val -> logger.info("value: {}", getValue(val)));
 
         printAll();
     }
 
     private void printAll() {
         logger.info("content");
-        for(var entry: cache.asMap().entrySet()) {
+        for (var entry : cache.asMap().entrySet()) {
             var key = entry.getKey();
             var value = entry.getValue();
             logger.info("key:{}, value:{}", key, value);

@@ -1,6 +1,8 @@
 plugins {
     java
     id("io.spring.dependency-management") version "1.1.0"
+    id("name.remal.sonarlint") version "3.0.9"
+    id("com.diffplug.spotless") version "6.17.0"
 }
 
 java {
@@ -36,8 +38,14 @@ dependencies {
 configurations.all {
     resolutionStrategy {
         failOnVersionConflict()
+
+        force("org.sonarsource.analyzer-commons:sonar-analyzer-commons:2.4.0.1317")
+        force("com.google.code.findbugs:jsr305:3.0.2")
+        force("org.sonarsource.sslr:sslr-core:1.24.0.633")
+        force("org.eclipse.platform:org.eclipse.osgi:3.18.300")
    }
 }
+apply(plugin = "name.remal.sonarlint")
 
 tasks {
     compileJava {
@@ -46,6 +54,12 @@ tasks {
     }
     compileTestJava {
         options.encoding = "UTF-8"
+    }
+}
+
+spotless {
+    java {
+        googleJavaFormat("1.16.0").aosp()
     }
 }
 

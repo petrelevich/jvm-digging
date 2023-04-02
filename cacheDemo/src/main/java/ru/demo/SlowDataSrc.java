@@ -2,11 +2,9 @@ package ru.demo;
 
 import java.util.concurrent.TimeUnit;
 
-
 public class SlowDataSrc {
 
-    private SlowDataSrc() {
-    }
+    private SlowDataSrc() {}
 
     public static long getValue(int key) {
         try {
