@@ -4,7 +4,6 @@ import static org.springframework.kafka.support.serializer.JsonDeserializer.TYPE
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
-import java.util.concurrent.Executors;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -14,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.config.KafkaListenerContainerFactory;
@@ -61,7 +61,6 @@ public class ApplicationConfig {
     @Bean("listenerContainerFactory")
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, StringValue>>
             listenerContainerFactory(ConsumerFactory<String, StringValue> consumerFactory) {
-        int concurrency = 1;
         var factory = new ConcurrentKafkaListenerContainerFactory<String, StringValue>();
         factory.setConsumerFactory(consumerFactory);
         factory.setBatchListener(true);
@@ -69,8 +68,8 @@ public class ApplicationConfig {
         factory.getContainerProperties().setIdleBetweenPolls(1_000);
         factory.getContainerProperties().setPollTimeout(1_000);
 
-        var executor =
-                Executors.newFixedThreadPool(concurrency, task -> new Thread(task, "kafka-task"));
+        var executor = new SimpleAsyncTaskExecutor("k-consumer-");
+        executor.setConcurrencyLimit(10);
         var listenerTaskExecutor = new ConcurrentTaskExecutor(executor);
         factory.getContainerProperties().setListenerTaskExecutor(listenerTaskExecutor);
         return factory;
