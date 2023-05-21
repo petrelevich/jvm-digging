@@ -1,5 +1,7 @@
 package com.datasrc;
 
+import static org.apache.kafka.clients.CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -12,16 +14,15 @@ import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.utility.DockerImageName;
 
-import static org.apache.kafka.clients.CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG;
-
 class KafkaBase {
     private static final Logger log = LoggerFactory.getLogger(KafkaBase.class);
 
-    private final static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.0.0"));
+    private static final KafkaContainer kafka =
+            new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.0.0"));
     private static String bootstrapServers;
 
-
-    public static void start(Collection<NewTopic> topics) throws ExecutionException, InterruptedException, TimeoutException {
+    public static void start(Collection<NewTopic> topics)
+            throws ExecutionException, InterruptedException, TimeoutException {
         kafka.start();
         bootstrapServers = kafka.getBootstrapServers();
 
@@ -29,7 +30,7 @@ class KafkaBase {
         try (var admin = AdminClient.create(Map.of(BOOTSTRAP_SERVERS_CONFIG, bootstrapServers))) {
             var result = admin.createTopics(topics);
 
-            for(var topicResult: result.values().values()) {
+            for (var topicResult : result.values().values()) {
                 topicResult.get(10, TimeUnit.SECONDS);
             }
         }

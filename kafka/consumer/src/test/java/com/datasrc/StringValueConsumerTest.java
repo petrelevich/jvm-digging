@@ -1,7 +1,16 @@
 package com.datasrc;
 
+import static com.datasrc.JsonSerializer.OBJECT_MAPPER;
+import static com.datasrc.MyConsumer.TOPIC_NAME;
+import static org.apache.kafka.clients.CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG;
+import static org.apache.kafka.clients.CommonClientConfigs.CLIENT_ID_CONFIG;
+import static org.apache.kafka.clients.producer.ProducerConfig.ACKS_CONFIG;
+import static org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG;
+import static org.apache.kafka.clients.producer.ProducerConfig.LINGER_MS_CONFIG;
+import static org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Properties;
@@ -20,17 +29,6 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.datasrc.JsonSerializer.OBJECT_MAPPER;
-import static com.datasrc.MyConsumer.TOPIC_NAME;
-import static org.apache.kafka.clients.CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG;
-import static org.apache.kafka.clients.CommonClientConfigs.CLIENT_ID_CONFIG;
-import static org.apache.kafka.clients.producer.ProducerConfig.ACKS_CONFIG;
-import static org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG;
-import static org.apache.kafka.clients.producer.ProducerConfig.LINGER_MS_CONFIG;
-import static org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
-
 class StringValueConsumerTest {
     private static final Logger log = LoggerFactory.getLogger(StringValueConsumerTest.class);
 
@@ -40,28 +38,31 @@ class StringValueConsumerTest {
     }
 
     @Test
-    void dataHandlerTest() throws JsonProcessingException {
-        //given
-        List<StringValue> stringValues = LongStream.range(0, 9).boxed()
-                .map(idx -> new StringValue(idx, "test:" + idx))
-                .toList();
+    void dataHandlerTest() {
+        // given
+        List<StringValue> stringValues =
+                LongStream.range(0, 9)
+                        .boxed()
+                        .map(idx -> new StringValue(idx, "test:" + idx))
+                        .toList();
         putValuesToKafka(stringValues);
-
         var myConsumer = new MyConsumer(KafkaBase.getBootstrapServers());
 
         List<StringValue> factStringValues = new CopyOnWriteArrayList<>();
         var dataConsumer = new StringValueConsumer(myConsumer, factStringValues::add);
 
-        //when
+        // when
         CompletableFuture.runAsync(dataConsumer::startSending);
 
-        //then
-        await().atMost(30, TimeUnit.SECONDS).until(() -> factStringValues.size() == stringValues.size());
+        // then
+        await().atMost(30, TimeUnit.SECONDS)
+                .until(() -> factStringValues.size() == stringValues.size());
+
         assertThat(factStringValues).hasSameElementsAs(stringValues);
         dataConsumer.stopSending();
     }
 
-    private void putValuesToKafka(List<StringValue> stringValues) throws JsonProcessingException {
+    private void putValuesToKafka(List<StringValue> stringValues) {
         Properties props = new Properties();
         props.put(CLIENT_ID_CONFIG, "myKafkaTestProducer");
         props.put(BOOTSTRAP_SERVERS_CONFIG, KafkaBase.getBootstrapServers());

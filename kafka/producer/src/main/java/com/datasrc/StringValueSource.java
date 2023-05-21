@@ -18,7 +18,8 @@ public class StringValueSource implements ValueSource {
     @Override
     public void generate() {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        executor.scheduleAtFixedRate(() -> valueConsumer.accept(makeValue()), 0, 1, TimeUnit.SECONDS);
+        executor.scheduleAtFixedRate(
+                () -> valueConsumer.accept(makeValue()), 0, 1, TimeUnit.SECONDS);
     }
 
     private StringValue makeValue() {

@@ -1,11 +1,10 @@
 package com.datasrc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.kafka.common.errors.SerializationException;
-import org.apache.kafka.common.serialization.Serializer;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import org.apache.kafka.common.errors.SerializationException;
+import org.apache.kafka.common.serialization.Serializer;
 
 public class JsonSerializer<T> implements Serializer<T> {
     public static final String OBJECT_MAPPER = "objectMapper";
@@ -24,7 +23,7 @@ public class JsonSerializer<T> implements Serializer<T> {
     public byte[] serialize(String topic, T data) {
         try {
             if (data == null) {
-                return null;
+                return new byte[] {};
             } else {
                 return mapper.writeValueAsString(data).getBytes(encoding);
             }
