@@ -2,6 +2,8 @@ rootProject.name = "kafka"
 
 include("consumer")
 include("producer")
+include("reactive-kafka-sender")
+include("reactive-kafka-receiver")
 
 pluginManagement {
     val jgitver: String by settings

@@ -33,6 +33,9 @@ allprojects {
 
     val testcontainersBom: String by project
     val kafkaClients: String by project
+    val reactorKafka: String by project
+    val blockhound: String by project
+    val reactorTest: String by project
 
     apply(plugin = "io.spring.dependency-management")
     dependencyManagement {
@@ -41,7 +44,10 @@ allprojects {
                 mavenBom(BOM_COORDINATES)
                 mavenBom("org.testcontainers:testcontainers-bom:$testcontainersBom")
             }
-            dependency ("org.apache.kafka:kafka-clients:$kafkaClients")
+            dependency("org.apache.kafka:kafka-clients:$kafkaClients")
+            dependency("io.projectreactor.kafka:reactor-kafka:$reactorKafka")
+            dependency("io.projectreactor.tools:blockhound:$blockhound")
+            dependency("io.projectreactor:reactor-test:$reactorTest")
         }
     }
     configurations.all {
@@ -88,6 +94,7 @@ subprojects {
     }
 
     tasks.withType<Test> {
+        jvmArgs = listOf("-XX:+AllowRedefinitionToAddDeleteMethods")
         useJUnitPlatform()
         testLogging.showExceptions = true
         reports {
