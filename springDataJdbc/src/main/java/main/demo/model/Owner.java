@@ -1,27 +1,23 @@
 package main.demo.model;
 
+import java.util.Set;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.annotation.Transient;
-import org.springframework.data.domain.DomainEvents;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.util.Set;
-
 @Table("owner")
 public class Owner implements Persistable<String> {
 
-    @Id
-    private final String ownerName;
+    @Id private final String ownerName;
     private final String address;
 
     @MappedCollection(idColumn = "owner_name")
     private final Set<Dog> dogs;
 
-    @Transient
-    private final boolean isNew;
+    @Transient private final boolean isNew;
 
     public Owner(String ownerName, String address, Set<Dog> dogs, boolean isNew) {
         this.ownerName = ownerName;
@@ -30,7 +26,7 @@ public class Owner implements Persistable<String> {
         this.dogs = dogs;
     }
 
-    @PersistenceConstructor
+    @PersistenceCreator
     public Owner(String ownerName, String address, Set<Dog> dogs) {
         this(ownerName, address, dogs, false);
     }
@@ -55,11 +51,17 @@ public class Owner implements Persistable<String> {
 
     @Override
     public String toString() {
-        return "Owner{" +
-                "ownerName='" + ownerName + '\'' +
-                ", address='" + address + '\'' +
-                ", isNew=" + isNew +
-                ", dogs=" + dogs +
-                '}';
+        return "Owner{"
+                + "ownerName='"
+                + ownerName
+                + '\''
+                + ", address='"
+                + address
+                + '\''
+                + ", isNew="
+                + isNew
+                + ", dogs="
+                + dogs
+                + '}';
     }
 }

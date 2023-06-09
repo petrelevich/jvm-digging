@@ -1,21 +1,20 @@
 package main.examples.model;
 
+import java.util.Set;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
-import java.util.Set;
 
 @Table("record_package")
 public class RecordPackage {
-    @Id
-    private final Long recordPackageId;
+    @Id private final Long recordPackageId;
     private final String name;
 
     @MappedCollection(idColumn = "record_package_id")
     private final Set<Record> records;
 
-    @PersistenceConstructor
+    @PersistenceCreator
     private RecordPackage(Long recordPackageId, String name, Set<Record> records) {
         this.recordPackageId = recordPackageId;
         this.name = name;
@@ -42,10 +41,14 @@ public class RecordPackage {
 
     @Override
     public String toString() {
-        return "RecordPackage{" +
-                "recordPackageId=" + recordPackageId +
-                ", name='" + name + '\'' +
-                ", recordList=" + records +
-                '}';
+        return "RecordPackage{"
+                + "recordPackageId="
+                + recordPackageId
+                + ", name='"
+                + name
+                + '\''
+                + ", recordList="
+                + records
+                + '}';
     }
 }

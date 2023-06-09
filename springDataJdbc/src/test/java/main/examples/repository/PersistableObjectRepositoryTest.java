@@ -1,16 +1,15 @@
 package main.examples.repository;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import main.examples.model.PersistableObject;
 import main.examples.repository.base.BasePersistenceTest;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 class PersistableObjectRepositoryTest extends BasePersistenceTest {
 
-    @Autowired
-    PersistableObjectRepository repository;
+    @Autowired PersistableObjectRepository repository;
 
     @Test
     void saveTestWithNullId() {

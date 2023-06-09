@@ -1,13 +1,12 @@
 package main.examples.model;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Table("record")
 public class Record {
-    @Id
-    private final Long recordId;
+    @Id private final Long recordId;
     private final Long recordPackageId;
     private final String data;
 
@@ -17,7 +16,7 @@ public class Record {
         this.data = data;
     }
 
-    @PersistenceConstructor
+    @PersistenceCreator
     private Record(Long recordId, Long recordPackageId, String data) {
         this.recordId = recordId;
         this.recordPackageId = recordPackageId;
@@ -38,10 +37,14 @@ public class Record {
 
     @Override
     public String toString() {
-        return "Record{" +
-                "recordId=" + recordId +
-                ", recordPackageId=" + recordPackageId +
-                ", data='" + data + '\'' +
-                '}';
+        return "Record{"
+                + "recordId="
+                + recordId
+                + ", recordPackageId="
+                + recordPackageId
+                + ", data='"
+                + data
+                + '\''
+                + '}';
     }
 }

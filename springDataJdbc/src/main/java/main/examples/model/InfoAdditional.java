@@ -1,14 +1,13 @@
 package main.examples.model;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Table("info_additional")
 public class InfoAdditional {
 
-    @Id
-    private final Long infoAdditionalId;
+    @Id private final Long infoAdditionalId;
     private final Long infoMainId;
     private final String additionalData;
 
@@ -18,7 +17,7 @@ public class InfoAdditional {
         this.additionalData = additionalData;
     }
 
-    @PersistenceConstructor
+    @PersistenceCreator
     private InfoAdditional(Long infoAdditionalId, Long infoMainId, String additionalData) {
         this.infoAdditionalId = infoAdditionalId;
         this.infoMainId = infoMainId;
@@ -39,10 +38,14 @@ public class InfoAdditional {
 
     @Override
     public String toString() {
-        return "InfoAdditional{" +
-                "infoAdditionalId=" + infoAdditionalId +
-                ", infoMainId=" + infoMainId +
-                ", additionalData='" + additionalData + '\'' +
-                '}';
+        return "InfoAdditional{"
+                + "infoAdditionalId="
+                + infoAdditionalId
+                + ", infoMainId="
+                + infoMainId
+                + ", additionalData='"
+                + additionalData
+                + '\''
+                + '}';
     }
 }

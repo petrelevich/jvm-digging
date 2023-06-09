@@ -1,14 +1,13 @@
 package main.demo.model;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Table("dog")
 public class Dog {
 
-    @Id
-    private final Long dogId;
+    @Id private final Long dogId;
     private final String name;
     private final String ownerName;
 
@@ -20,7 +19,7 @@ public class Dog {
         this(null, name, ownerName);
     }
 
-    @PersistenceConstructor
+    @PersistenceCreator
     public Dog(Long dogId, String name, String ownerName) {
         this.dogId = dogId;
         this.name = name;
@@ -41,10 +40,15 @@ public class Dog {
 
     @Override
     public String toString() {
-        return "Dog{" +
-                "dogId=" + dogId +
-                ", name='" + name + '\'' +
-                ", ownerName='" + ownerName + '\'' +
-                '}';
+        return "Dog{"
+                + "dogId="
+                + dogId
+                + ", name='"
+                + name
+                + '\''
+                + ", ownerName='"
+                + ownerName
+                + '\''
+                + '}';
     }
 }

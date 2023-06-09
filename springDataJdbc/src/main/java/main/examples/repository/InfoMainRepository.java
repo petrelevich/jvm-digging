@@ -1,9 +1,8 @@
 package main.examples.repository;
 
+import main.examples.model.InfoMain;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import main.examples.model.InfoMain;
 
 @Repository
-public interface InfoMainRepository extends CrudRepository<InfoMain, Long> {
-}
+public interface InfoMainRepository extends CrudRepository<InfoMain, Long> {}

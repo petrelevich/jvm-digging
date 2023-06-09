@@ -25,10 +25,15 @@ public class GuardDog {
 
     @Override
     public String toString() {
-        return "GuardDog{" +
-                "dogId=" + dogId +
-                ", name='" + name + '\'' +
-                ", officerName='" + officerName + '\'' +
-                '}';
+        return "GuardDog{"
+                + "dogId="
+                + dogId
+                + ", name='"
+                + name
+                + '\''
+                + ", officerName='"
+                + officerName
+                + '\''
+                + '}';
     }
 }

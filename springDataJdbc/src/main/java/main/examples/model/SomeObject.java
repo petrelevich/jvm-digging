@@ -5,8 +5,7 @@ import org.springframework.data.relational.core.mapping.Table;
 
 @Table("some_object")
 public class SomeObject {
-    @Id
-    private final Long id;
+    @Id private final Long id;
     private final String name;
     private final String data;
 

@@ -1,25 +1,25 @@
 package main.examples.repository.base;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.PostgreSQLContainer;
 
-@SpringBootTest(classes = TestPersistenceConfiguration.class)
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Transactional
-@Testcontainers
-public class BasePersistenceTest {
+@SpringBootTest
+public abstract class BasePersistenceTest {
+    private static final PostgreSQLContainer<?> POSTGRE_SQL_CONTAINER =
+            new PostgreSQLContainer<>("postgres:13");
 
-    @Container
-    private static final TestContainersConfig.CustomPostgreSQLContainer
-            postgreSQLContainer = TestContainersConfig.CustomPostgreSQLContainer.getInstance();
+    static {
+        POSTGRE_SQL_CONTAINER.start();
+    }
 
-    @AfterAll
-    public static void shutdown() {
-        postgreSQLContainer.stop();
+    @DynamicPropertySource
+    public static void properties(DynamicPropertyRegistry registry) {
+        registry.add(
+                "spring.datasource.url",
+                () -> POSTGRE_SQL_CONTAINER.getJdbcUrl() + "&stringtype=unspecified");
+        registry.add("spring.datasource.username", POSTGRE_SQL_CONTAINER::getUsername);
+        registry.add("spring.datasource.password", POSTGRE_SQL_CONTAINER::getPassword);
     }
 }

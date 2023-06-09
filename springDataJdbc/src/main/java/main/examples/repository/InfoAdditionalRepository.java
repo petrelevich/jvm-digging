@@ -1,9 +1,8 @@
 package main.examples.repository;
 
+import main.examples.model.InfoAdditional;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import main.examples.model.InfoAdditional;
 
 @Repository
-public interface InfoAdditionalRepository extends CrudRepository<InfoAdditional, Long> {
-}
+public interface InfoAdditionalRepository extends CrudRepository<InfoAdditional, Long> {}

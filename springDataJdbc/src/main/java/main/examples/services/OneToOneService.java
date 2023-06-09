@@ -1,11 +1,11 @@
 package main.examples.services;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 import main.examples.model.InfoAdditional;
 import main.examples.model.InfoMain;
 import main.examples.repository.InfoMainRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 @Service
 public class OneToOneService {
@@ -16,7 +16,7 @@ public class OneToOneService {
         this.infoMainRepository = infoMainRepository;
     }
 
-    //@PostConstruct
+    // @PostConstruct
     public void someAction() {
         logger.info("creating into");
         var infoAdditional = new InfoAdditional("InfoAdditional");
@@ -26,7 +26,7 @@ public class OneToOneService {
         var infoMainSaved = infoMainRepository.save(infoMain);
         var infoMainLoaded = infoMainRepository.findById(infoMainSaved.getInfoMainId());
 
-        infoMainLoaded.ifPresent(loaded -> System.out.println(loaded.toString()));
+        infoMainLoaded.ifPresent(loaded -> logger.info("infoMainLoaded:{}", loaded));
 
         logger.info("creating info done");
     }

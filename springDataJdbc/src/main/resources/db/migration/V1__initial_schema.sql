@@ -67,3 +67,12 @@ create table dog
 
 alter table dog
     add foreign key (owner_name) references owner (owner_name);
+
+
+create table table_with_pk
+(
+    id_part1 varchar(10),
+    id_part2 varchar(100),
+    value    varchar(100)
+);
+alter table table_with_pk add primary key (id_part1, id_part2);

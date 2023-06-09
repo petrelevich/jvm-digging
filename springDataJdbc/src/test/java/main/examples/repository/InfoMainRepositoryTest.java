@@ -1,18 +1,16 @@
 package main.examples.repository;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import main.examples.model.InfoAdditional;
 import main.examples.model.InfoMain;
 import main.examples.repository.base.BasePersistenceTest;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 class InfoMainRepositoryTest extends BasePersistenceTest {
 
-    @Autowired
-    InfoMainRepository repository;
+    @Autowired InfoMainRepository repository;
 
     @Test
     void saveAndFindTest() {
@@ -27,6 +25,7 @@ class InfoMainRepositoryTest extends BasePersistenceTest {
         assertThat(infoMainLoaded.get().getMainData()).isEqualTo(infoMain.getMainData());
 
         assertThat(infoMainLoaded.get().getInfoAdditional()).isNotNull();
-        assertThat(infoMainLoaded.get().getInfoAdditional().getAdditionalData()).isEqualTo(infoAdditional.getAdditionalData());
+        assertThat(infoMainLoaded.get().getInfoAdditional().getAdditionalData())
+                .isEqualTo(infoAdditional.getAdditionalData());
     }
 }
