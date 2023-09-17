@@ -46,17 +46,6 @@ dependencyManagement {
         }
     }
 }
-configurations.all {
-    resolutionStrategy {
-        failOnVersionConflict()
-
-        force("org.sonarsource.analyzer-commons:sonar-analyzer-commons:2.4.0.1317")
-        force("com.google.code.findbugs:jsr305:3.0.2")
-        force("org.sonarsource.sslr:sslr-core:1.24.0.633")
-        force("org.eclipse.platform:org.eclipse.osgi:3.18.300")
-    }
-}
-
 
 dependencies {
     implementation("ch.qos.logback:logback-classic")
@@ -69,6 +58,17 @@ dependencies {
     testImplementation("org.testcontainers:postgresql")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+}
+
+configurations.all {
+    resolutionStrategy {
+        failOnVersionConflict()
+
+        force("org.sonarsource.analyzer-commons:sonar-analyzer-commons:2.4.0.1317")
+        force("com.google.code.findbugs:jsr305:3.0.2")
+        force("org.sonarsource.sslr:sslr-core:1.24.0.633")
+        force("org.eclipse.platform:org.eclipse.osgi:3.18.300")
+    }
 }
 
 jgitver {

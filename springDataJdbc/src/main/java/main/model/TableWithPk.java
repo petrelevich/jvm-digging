@@ -1,4 +1,4 @@
-package main.examples.model;
+package main.model;
 
 import static org.springframework.data.relational.core.mapping.Embedded.OnEmpty.USE_EMPTY;
 

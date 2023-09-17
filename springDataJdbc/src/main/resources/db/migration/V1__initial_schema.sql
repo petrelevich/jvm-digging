@@ -1,73 +1,23 @@
-create table some_object
+create table Manager
 (
-    id   bigserial    not null
-        constraint some_object_pk primary key,
-    name varchar(256) not null,
-    data varchar(256) not null
+    id    varchar(50) not null primary key,
+    label varchar(50)
 );
 
-create table persistable_object
+create table client
 (
-    id   bigserial    not null
-        constraint persistable_object_pk primary key,
-    name varchar(256) not null,
-    data varchar(256) not null
+    id           bigserial   not null primary key,
+    order_column int         not null,
+    name         varchar(50) not null,
+    manager_id   varchar(50) not null references Manager (id)
 );
+create index idx_client_manager_id on client (manager_id);
 
-create table record_package
+create table client_details
 (
-    record_package_id bigserial    not null
-        constraint record_package_pk primary key,
-    name              varchar(256) not null
+    client_id bigint      not null references client (id),
+    info      varchar(50) not null
 );
-
-create table record
-(
-    record_id         bigserial    not null
-        constraint record_pk primary key,
-    record_package_id bigint       not null,
-    data              varchar(256) not null
-);
-
-alter table record
-    add foreign key (record_package_id) references record_package;
-
-
-create table info_main
-(
-    info_main_id bigserial    not null
-        constraint info_pk primary key,
-    main_data    varchar(256) not null
-);
-
-create table info_additional
-(
-    info_additional_id bigserial    not null
-        constraint additional_pk primary key,
-    info_main_id       bigint       not null,
-    additional_data    varchar(256) not null
-);
-
-alter table info_additional
-    add foreign key (info_main_id) references info_main;
-
----------------------------------------
-create table owner
-(
-    owner_name varchar(256) primary key,
-    address    varchar(500) not null
-);
-
-create table dog
-(
-    dog_id     bigserial primary key,
-    name       varchar(200) not null,
-    owner_name varchar(256)
-);
-
-alter table dog
-    add foreign key (owner_name) references owner (owner_name);
-
 
 create table table_with_pk
 (

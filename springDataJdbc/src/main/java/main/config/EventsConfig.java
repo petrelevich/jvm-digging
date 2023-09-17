@@ -1,6 +1,6 @@
 package main.config;
 
-import main.listeners.OwnerListener;
+import main.listeners.ClientListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 public class EventsConfig {
 
     @Bean
-    public OwnerListener ownerListener() {
-        return new OwnerListener();
+    public ClientListener ownerListener() {
+        return new ClientListener();
     }
 }
