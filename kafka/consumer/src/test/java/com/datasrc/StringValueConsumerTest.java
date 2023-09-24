@@ -40,11 +40,10 @@ class StringValueConsumerTest {
     @Test
     void dataHandlerTest() {
         // given
-        List<StringValue> stringValues =
-                LongStream.range(0, 9)
-                        .boxed()
-                        .map(idx -> new StringValue(idx, "test:" + idx))
-                        .toList();
+        List<StringValue> stringValues = LongStream.range(0, 9)
+                .boxed()
+                .map(idx -> new StringValue(idx, "test:" + idx))
+                .toList();
         putValuesToKafka(stringValues);
         var myConsumer = new MyConsumer(KafkaBase.getBootstrapServers());
 
@@ -55,8 +54,7 @@ class StringValueConsumerTest {
         CompletableFuture.runAsync(dataConsumer::startSending);
 
         // then
-        await().atMost(30, TimeUnit.SECONDS)
-                .until(() -> factStringValues.size() == stringValues.size());
+        await().atMost(30, TimeUnit.SECONDS).until(() -> factStringValues.size() == stringValues.size());
 
         assertThat(factStringValues).hasSameElementsAs(stringValues);
         dataConsumer.stopSending();

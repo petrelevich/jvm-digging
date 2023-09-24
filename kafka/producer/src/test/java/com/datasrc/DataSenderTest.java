@@ -22,32 +22,29 @@ class DataSenderTest {
     @Test
     void dataHandlerTest() {
         // given
-        List<StringValue> stringValues =
-                LongStream.range(0, 9)
-                        .boxed()
-                        .map(idx -> new StringValue(idx, "test:" + idx))
-                        .toList();
+        List<StringValue> stringValues = LongStream.range(0, 9)
+                .boxed()
+                .map(idx -> new StringValue(idx, "test:" + idx))
+                .toList();
 
         var myProducer = new MyProducer(KafkaBase.getBootstrapServers());
 
         List<StringValue> factStringValues = new CopyOnWriteArrayList<>();
         var dataProducer = new DataSender(myProducer, factStringValues::add);
-        var valueSource =
-                new ValueSource() {
-                    @Override
-                    public void generate() {
-                        for (var value : stringValues) {
-                            dataProducer.dataHandler(value);
-                        }
-                    }
-                };
+        var valueSource = new ValueSource() {
+            @Override
+            public void generate() {
+                for (var value : stringValues) {
+                    dataProducer.dataHandler(value);
+                }
+            }
+        };
 
         // when
         valueSource.generate();
 
         // then
-        await().atMost(60, TimeUnit.SECONDS)
-                .until(() -> factStringValues.size() == stringValues.size());
+        await().atMost(60, TimeUnit.SECONDS).until(() -> factStringValues.size() == stringValues.size());
         assertThat(factStringValues).hasSameElementsAs(stringValues);
     }
 }

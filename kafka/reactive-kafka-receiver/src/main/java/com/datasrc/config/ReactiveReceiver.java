@@ -41,8 +41,7 @@ public class ReactiveReceiver {
     public static final String GROUP_ID_CONFIG_NAME = "reactiveKafkaConsumerGroup";
     public static final int MAX_POLL_INTERVAL_MS = 1_000;
 
-    public ReactiveReceiver(
-            String bootstrapServers, String topicName, Scheduler schedulerValueReceiver) {
+    public ReactiveReceiver(String bootstrapServers, String topicName, Scheduler schedulerValueReceiver) {
         Properties props = new Properties();
         props.put(BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(GROUP_ID_CONFIG, GROUP_ID_CONFIG_NAME);
@@ -58,21 +57,18 @@ public class ReactiveReceiver {
         props.put(MAX_POLL_RECORDS_CONFIG, 3);
         props.put(MAX_POLL_INTERVAL_MS_CONFIG, MAX_POLL_INTERVAL_MS);
 
-        ReceiverOptions<Long, StringValue> receiverOptions =
-                ReceiverOptions.<Long, StringValue>create(props)
-                        .pollTimeout(Duration.ofSeconds(500))
-                        .schedulerSupplier(() -> schedulerValueReceiver)
-                        .subscription(Collections.singleton(topicName));
+        ReceiverOptions<Long, StringValue> receiverOptions = ReceiverOptions.<Long, StringValue>create(props)
+                .pollTimeout(Duration.ofSeconds(500))
+                .schedulerSupplier(() -> schedulerValueReceiver)
+                .subscription(Collections.singleton(topicName));
 
-        inboundFlux =
-                KafkaReceiver.create(receiverOptions)
-                        .receiveAutoAck()
-                        .concatMap(
-                                consumerRecordFlux -> {
-                                    log.info("consumerRecordFlux done, commit");
-                                    return consumerRecordFlux;
-                                })
-                        .retryWhen(Retry.backoff(3, Duration.of(10L, ChronoUnit.SECONDS)));
+        inboundFlux = KafkaReceiver.create(receiverOptions)
+                .receiveAutoAck()
+                .concatMap(consumerRecordFlux -> {
+                    log.info("consumerRecordFlux done, commit");
+                    return consumerRecordFlux;
+                })
+                .retryWhen(Retry.backoff(3, Duration.of(10L, ChronoUnit.SECONDS)));
     }
 
     public Flux<ConsumerRecord<Long, StringValue>> getInboundFlux() {
@@ -82,11 +78,7 @@ public class ReactiveReceiver {
     public String makeGroupInstanceIdConfig() {
         try {
             var hostName = InetAddress.getLocalHost().getHostName();
-            return String.join(
-                    "-",
-                    GROUP_ID_CONFIG_NAME,
-                    hostName,
-                    String.valueOf(random.nextInt(100_999_999)));
+            return String.join("-", GROUP_ID_CONFIG_NAME, hostName, String.valueOf(random.nextInt(100_999_999)));
         } catch (Exception ex) {
             throw new ConsumerException("can't make GroupInstanceIdConfig", ex);
         }

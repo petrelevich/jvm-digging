@@ -20,14 +20,11 @@ public class StringValueSource implements ValueSource {
 
     @Override
     public Flux<StringValue> makeValueFlow() {
-        return Flux.generate(
-                        () -> 0L,
-                        (BiFunction<Long, SynchronousSink<Long>, Long>)
-                                (prev, sink) -> {
-                                    var newValue = prev + 1;
-                                    sink.next(newValue);
-                                    return newValue;
-                                })
+        return Flux.generate(() -> 0L, (BiFunction<Long, SynchronousSink<Long>, Long>) (prev, sink) -> {
+                    var newValue = prev + 1;
+                    sink.next(newValue);
+                    return newValue;
+                })
                 .delayElements(Duration.ofSeconds(1), scheduler)
                 .map(id -> new StringValue(id, "stVal:" + id))
                 .doOnNext(val -> log.info("val:{}", val));

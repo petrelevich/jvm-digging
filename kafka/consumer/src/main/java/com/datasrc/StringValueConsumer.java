@@ -27,10 +27,7 @@ public class StringValueConsumer {
 
     public void startSending() {
         executor.scheduleAtFixedRate(
-                this::poll,
-                0,
-                MAX_POLL_INTERVAL_MS,
-                TimeUnit.MILLISECONDS); // try MAX_POLL_INTERVAL_MS * 2L
+                this::poll, 0, MAX_POLL_INTERVAL_MS, TimeUnit.MILLISECONDS); // try MAX_POLL_INTERVAL_MS * 2L
     }
 
     private void poll() {

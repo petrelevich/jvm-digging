@@ -29,11 +29,10 @@ class DataSenderTest extends BaseTest {
     @Test
     void dataHandlerTest() {
         // given
-        List<StringValue> stringValues =
-                LongStream.range(1, 9)
-                        .boxed()
-                        .map(idx -> new StringValue(idx, "stVal:" + idx))
-                        .toList();
+        List<StringValue> stringValues = LongStream.range(1, 9)
+                .boxed()
+                .map(idx -> new StringValue(idx, "stVal:" + idx))
+                .toList();
 
         var schedulerKafka = Schedulers.newParallel("kafka-test", 1);
         var reactiveSender = new ReactiveSender(KafkaBase.getBootstrapServers(), schedulerKafka);
@@ -44,15 +43,13 @@ class DataSenderTest extends BaseTest {
 
         List<StringValue> factStringValues = new CopyOnWriteArrayList<>();
 
-        var dataSender =
-                new DataSender(TOPIC_NAME, reactiveSender, valueFlow, factStringValues::add);
+        var dataSender = new DataSender(TOPIC_NAME, reactiveSender, valueFlow, factStringValues::add);
 
         // when
         dataSender.send();
 
         // then
-        await().atMost(20, TimeUnit.SECONDS)
-                .until(() -> factStringValues.size() == stringValues.size());
+        await().atMost(20, TimeUnit.SECONDS).until(() -> factStringValues.size() == stringValues.size());
         assertThat(factStringValues).hasSameElementsAs(stringValues);
     }
 }

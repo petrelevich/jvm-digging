@@ -41,18 +41,14 @@ public class ReactiveSender {
         props.put(OBJECT_MAPPER, new ObjectMapper());
 
         SenderOptions<Long, StringValue> senderOptions =
-                SenderOptions.<Long, StringValue>create(props)
-                        .maxInFlight(10)
-                        .scheduler(schedulerKafka);
+                SenderOptions.<Long, StringValue>create(props).maxInFlight(10).scheduler(schedulerKafka);
 
         sender = KafkaSender.create(senderOptions);
 
-        var shutdownHook =
-                new Thread(
-                        () -> {
-                            log.info("closing kafka sender");
-                            sender.close();
-                        });
+        var shutdownHook = new Thread(() -> {
+            log.info("closing kafka sender");
+            sender.close();
+        });
         Runtime.getRuntime().addShutdownHook(shutdownHook);
     }
 

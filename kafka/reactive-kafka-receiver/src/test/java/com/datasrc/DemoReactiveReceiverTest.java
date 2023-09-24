@@ -45,18 +45,16 @@ class DemoReactiveReceiverTest extends BaseTest {
     @Test
     void dataHandlerTest() {
         // given
-        List<StringValue> stringValues =
-                LongStream.range(0, 9)
-                        .boxed()
-                        .map(idx -> new StringValue(idx, "test:" + idx))
-                        .toList();
+        List<StringValue> stringValues = LongStream.range(0, 9)
+                .boxed()
+                .map(idx -> new StringValue(idx, "test:" + idx))
+                .toList();
         putValuesToKafka(stringValues);
 
         var schedulerValueReceiver = Schedulers.newParallel("value-receiver-test", 1);
 
         var reactiveReceiver =
-                new ReactiveReceiver(
-                        KafkaBase.getBootstrapServers(), TOPIC_NAME, schedulerValueReceiver);
+                new ReactiveReceiver(KafkaBase.getBootstrapServers(), TOPIC_NAME, schedulerValueReceiver);
 
         List<StringValue> factStringValues = new CopyOnWriteArrayList<>();
         var dataConsumer = new StringValueConsumer(reactiveReceiver, factStringValues::add);
@@ -65,8 +63,7 @@ class DemoReactiveReceiverTest extends BaseTest {
         CompletableFuture.runAsync(dataConsumer::startConsume);
 
         // then
-        await().atMost(30, TimeUnit.SECONDS)
-                .until(() -> factStringValues.size() == stringValues.size());
+        await().atMost(30, TimeUnit.SECONDS).until(() -> factStringValues.size() == stringValues.size());
 
         assertThat(factStringValues).hasSameElementsAs(stringValues);
         dataConsumer.stopConsume();

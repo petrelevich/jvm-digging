@@ -23,19 +23,14 @@ public class DataSender {
         try {
             myProducer
                     .getMyProducer()
-                    .send(
-                            new ProducerRecord<>(TOPIC_NAME, value.id(), value),
-                            (metadata, exception) -> {
-                                if (exception != null) {
-                                    log.error("message wasn't sent", exception);
-                                } else {
-                                    log.info(
-                                            "message id:{} was sent, offset:{}",
-                                            value.id(),
-                                            metadata.offset());
-                                    sendAsk.accept(value);
-                                }
-                            });
+                    .send(new ProducerRecord<>(TOPIC_NAME, value.id(), value), (metadata, exception) -> {
+                        if (exception != null) {
+                            log.error("message wasn't sent", exception);
+                        } else {
+                            log.info("message id:{} was sent, offset:{}", value.id(), metadata.offset());
+                            sendAsk.accept(value);
+                        }
+                    });
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
         }

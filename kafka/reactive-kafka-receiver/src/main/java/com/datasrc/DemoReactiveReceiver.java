@@ -12,10 +12,8 @@ public class DemoReactiveReceiver {
         String topicName = "MyTopic";
         var schedulerValueReceiver = Schedulers.newParallel("value-receiver", 1);
 
-        var reactiveReceiver =
-                new ReactiveReceiver("localhost:9092", topicName, schedulerValueReceiver);
-        var dataConsumer =
-                new StringValueConsumer(reactiveReceiver, value -> log.info("value:{}", value));
+        var reactiveReceiver = new ReactiveReceiver("localhost:9092", topicName, schedulerValueReceiver);
+        var dataConsumer = new StringValueConsumer(reactiveReceiver, value -> log.info("value:{}", value));
         dataConsumer.startConsume();
     }
 }

@@ -41,12 +41,10 @@ public class MyProducer {
 
         kafkaProducer = new KafkaProducer<>(props);
 
-        var shutdownHook =
-                new Thread(
-                        () -> {
-                            log.info("closing kafka producer");
-                            kafkaProducer.close();
-                        });
+        var shutdownHook = new Thread(() -> {
+            log.info("closing kafka producer");
+            kafkaProducer.close();
+        });
         Runtime.getRuntime().addShutdownHook(shutdownHook);
     }
 

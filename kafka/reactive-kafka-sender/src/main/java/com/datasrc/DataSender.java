@@ -31,25 +31,16 @@ public class DataSender {
     public void send() {
         reactiveSender
                 .getSender()
-                .send(
-                        valueFlux.map(
-                                value ->
-                                        SenderRecord.create(
-                                                topicName,
-                                                null,
-                                                null,
-                                                value.id(),
-                                                value,
-                                                new CorrelationMetadata(value))))
+                .send(valueFlux.map(value ->
+                        SenderRecord.create(topicName, null, null, value.id(), value, new CorrelationMetadata(value))))
                 .doOnError(error -> log.error("Send failed", error))
-                .doOnNext(
-                        senderResult -> {
-                            log.info(
-                                    "message id:{} was sent, offset:{}",
-                                    senderResult.correlationMetadata().value().id(),
-                                    senderResult.recordMetadata().offset());
-                            sendAsk.accept(senderResult.correlationMetadata().value());
-                        })
+                .doOnNext(senderResult -> {
+                    log.info(
+                            "message id:{} was sent, offset:{}",
+                            senderResult.correlationMetadata().value().id(),
+                            senderResult.recordMetadata().offset());
+                    sendAsk.accept(senderResult.correlationMetadata().value());
+                })
                 .subscribe();
     }
 }

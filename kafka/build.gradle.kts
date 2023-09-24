@@ -58,6 +58,7 @@ allprojects {
             force("com.google.code.findbugs:jsr305:3.0.2")
             force("org.sonarsource.sslr:sslr-core:1.24.0.633")
             force("org.eclipse.platform:org.eclipse.osgi:3.18.300")
+            force("com.google.guava:guava:32.1.2-jre")
         }
     }
 }
@@ -89,7 +90,7 @@ subprojects {
     apply<com.diffplug.gradle.spotless.SpotlessPlugin>()
     configure<com.diffplug.gradle.spotless.SpotlessExtension> {
         java {
-            googleJavaFormat("1.16.0").aosp()
+            palantirJavaFormat("2.38.0")
         }
     }
 

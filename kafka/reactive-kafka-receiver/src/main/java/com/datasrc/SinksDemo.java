@@ -20,7 +20,9 @@ public class SinksDemo implements Sinks.EmitFailureHandler {
     public static void main(String[] args) {
         var sinkDemo = new SinksDemo();
         sinkDemo.emit();
-        sinkDemo.receive().doOnNext(val -> log.info("received valueRecord:{}", val)).subscribe();
+        sinkDemo.receive()
+                .doOnNext(val -> log.info("received valueRecord:{}", val))
+                .subscribe();
 
         log.info("done");
     }
@@ -31,9 +33,7 @@ public class SinksDemo implements Sinks.EmitFailureHandler {
 
     public void emit() {
         executor.scheduleAtFixedRate(
-                () ->
-                        sink.emitNext(
-                                new ValueRecord("value" + id.incrementAndGet()), SinksDemo.this),
+                () -> sink.emitNext(new ValueRecord("value" + id.incrementAndGet()), SinksDemo.this),
                 0,
                 3,
                 TimeUnit.SECONDS);
@@ -44,8 +44,7 @@ public class SinksDemo implements Sinks.EmitFailureHandler {
     }
 
     @Override
-    public boolean onEmitFailure(
-            @NonNull SignalType signalType, @NonNull Sinks.EmitResult emitResult) {
+    public boolean onEmitFailure(@NonNull SignalType signalType, @NonNull Sinks.EmitResult emitResult) {
         log.error("signalType:{}, emitResult:{}", signalType, emitResult);
         return false;
     }

@@ -9,17 +9,14 @@ import reactor.test.StepVerifier;
 class InfraTest extends BaseTest {
     @Test
     void checkBlockhoundWorks() {
-        var mono =
-                Mono.delay(Duration.ofMillis(1))
-                        .doOnNext(
-                                it -> {
-                                    try {
-                                        System.out.println(Thread.currentThread().getName());
-                                        Thread.sleep(10);
-                                    } catch (InterruptedException e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                });
+        var mono = Mono.delay(Duration.ofMillis(1)).doOnNext(it -> {
+            try {
+                System.out.println(Thread.currentThread().getName());
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         StepVerifier.create(mono)
                 .expectErrorMatches(error -> error instanceof BlockingOperationError)

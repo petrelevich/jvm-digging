@@ -18,12 +18,8 @@ public class DemoReactiveSender {
         var schedulerKafka = Schedulers.newParallel("kafka", 1);
         var reactiveSender = new ReactiveSender("localhost:9092", schedulerKafka);
 
-        var dataSender =
-                new DataSender(
-                        topicName,
-                        reactiveSender,
-                        valueFlow,
-                        stringValue -> log.info("asked, value:{}", stringValue));
+        var dataSender = new DataSender(
+                topicName, reactiveSender, valueFlow, stringValue -> log.info("asked, value:{}", stringValue));
         dataSender.send();
     }
 }
