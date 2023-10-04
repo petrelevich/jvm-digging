@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class DbServiceManagerImpl implements DBServiceManager {
     private static final Logger log = LoggerFactory.getLogger(DbServiceManagerImpl.class);
@@ -34,10 +33,9 @@ public class DbServiceManagerImpl implements DBServiceManager {
 
     @Override
     public Optional<Manager> getManager(String no) {
-            var managerOptional = managerRepository.findById(no);
-            log.info("manager: {}", managerOptional);
-            return managerOptional;
-
+        var managerOptional = managerRepository.findById(no);
+        log.info("manager: {}", managerOptional);
+        return managerOptional;
     }
 
     @Override

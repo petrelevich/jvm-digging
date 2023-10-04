@@ -28,9 +28,12 @@ public class ActionDemo implements CommandLineRunner {
 
     private final TableWithPkRepository tableWithPkRepository;
 
-    public ActionDemo(ClientRepository clientRepository, ManagerRepository managerRepository,
-                      DBServiceClient dbServiceClient, DBServiceManager dbServiceManager,
-                      TableWithPkRepository tableWithPkRepository) {
+    public ActionDemo(
+            ClientRepository clientRepository,
+            ManagerRepository managerRepository,
+            DBServiceClient dbServiceClient,
+            DBServiceManager dbServiceManager,
+            TableWithPkRepository tableWithPkRepository) {
         this.managerRepository = managerRepository;
         this.clientRepository = clientRepository;
         this.dbServiceClient = dbServiceClient;
@@ -41,76 +44,89 @@ public class ActionDemo implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-//// создаем Manager
+        //// создаем Manager
         log.info(">>> manager creation");
-        dbServiceManager.saveManager(new Manager("m:" + System.currentTimeMillis(), "ManagerFirst", new HashSet<>(), new ArrayList<>(), true));
-
+        dbServiceManager.saveManager(new Manager(
+                "m:" + System.currentTimeMillis(), "ManagerFirst", new HashSet<>(), new ArrayList<>(), true));
 
         var managerName = "m:" + System.currentTimeMillis();
-        var managerSecond = dbServiceManager.saveManager(new Manager(managerName, "ManagerSecond",
-                Set.of(new Client("managClient1", managerName, 1, new ClientDetails("inf01")),
+        var managerSecond = dbServiceManager.saveManager(new Manager(
+                managerName,
+                "ManagerSecond",
+                Set.of(
+                        new Client("managClient1", managerName, 1, new ClientDetails("inf01")),
                         new Client("managClient2", managerName, 2, new ClientDetails("info2"))),
-                new ArrayList<>(), true));
-        var managerSecondSelected = dbServiceManager.getManager(managerSecond.getId())
+                new ArrayList<>(),
+                true));
+        var managerSecondSelected = dbServiceManager
+                .getManager(managerSecond.getId())
                 .orElseThrow(() -> new RuntimeException("Manager not found, id:" + managerSecond.getId()));
         log.info(">>> managerSecondSelected:{}", managerSecondSelected);
 
-//// обновляем Manager с удалением его клиентов
-        dbServiceManager.saveManager(new Manager(managerSecondSelected.getId(), "dbServiceSecondUpdated", new HashSet<>(), new ArrayList<>(), false));
-        var managerUpdated = dbServiceManager.getManager(managerSecondSelected.getId())
+        //// обновляем Manager с удалением его клиентов
+        dbServiceManager.saveManager(new Manager(
+                managerSecondSelected.getId(), "dbServiceSecondUpdated", new HashSet<>(), new ArrayList<>(), false));
+        var managerUpdated = dbServiceManager
+                .getManager(managerSecondSelected.getId())
                 .orElseThrow(() -> new RuntimeException("Manager not found, id:" + managerSecondSelected.getId()));
         log.info(">>> managerUpdated:{}", managerUpdated);
 
-/// создаем Client
-        var firstClient = dbServiceClient.saveClient(
-                new Client("dbServiceFirst" + System.currentTimeMillis(), managerSecond.getId(), 1,
-                        new ClientDetails("init1")));
+        /// создаем Client
+        var firstClient = dbServiceClient.saveClient(new Client(
+                "dbServiceFirst" + System.currentTimeMillis(), managerSecond.getId(), 1, new ClientDetails("init1")));
 
-        var clientSecond = dbServiceClient.saveClient(
-                new Client("dbServiceSecond" + System.currentTimeMillis(), managerSecond.getId(), 2,
-                        new ClientDetails("init2")));
-        var clientSecondSelected = dbServiceClient.getClient(clientSecond.getId())
+        var clientSecond = dbServiceClient.saveClient(new Client(
+                "dbServiceSecond" + System.currentTimeMillis(), managerSecond.getId(), 2, new ClientDetails("init2")));
+        var clientSecondSelected = dbServiceClient
+                .getClient(clientSecond.getId())
                 .orElseThrow(() -> new RuntimeException("Client not found, id:" + clientSecond.getId()));
         log.info(">>> clientSecondSelected:{}", clientSecondSelected);
 
-/// обновляем Client
-        dbServiceClient.saveClient(
-                new Client(clientSecondSelected.getId(), "dbServiceSecondUpdated", managerSecond.getId(),
-                        clientSecondSelected.getOrderColumn(), new ClientDetails("updated")));
-        var clientUpdated = dbServiceClient.getClient(clientSecondSelected.getId())
+        /// обновляем Client
+        dbServiceClient.saveClient(new Client(
+                clientSecondSelected.getId(),
+                "dbServiceSecondUpdated",
+                managerSecond.getId(),
+                clientSecondSelected.getOrderColumn(),
+                new ClientDetails("updated")));
+        var clientUpdated = dbServiceClient
+                .getClient(clientSecondSelected.getId())
                 .orElseThrow(() -> new RuntimeException("Client not found, id:" + clientSecondSelected.getId()));
         log.info("clientUpdated:{}", clientUpdated);
 
-
-/// получаем все сущности
+        /// получаем все сущности
         log.info(">>> All clients");
         dbServiceClient.findAll().forEach(client -> log.info("client:{}", client));
 
         log.info(">>> All managers");
         dbServiceManager.findAll().forEach(manager -> log.info("manager:{}", manager));
 
-/// применяем переопределенные методы репозитариев
-        var clientFoundByName = clientRepository.findByName(firstClient.getName())
+        /// применяем переопределенные методы репозитариев
+        var clientFoundByName = clientRepository
+                .findByName(firstClient.getName())
                 .orElseThrow(() -> new RuntimeException("client not found, name:" + firstClient.getName()));
         log.info("clientFoundByName:{}", clientFoundByName);
 
-        var clientFoundByNameIgnoreCase = clientRepository.findByNameIgnoreCase(firstClient.getName().toLowerCase())
+        var clientFoundByNameIgnoreCase = clientRepository
+                .findByNameIgnoreCase(firstClient.getName().toLowerCase())
                 .orElseThrow(() -> new RuntimeException("client not found, name:" + firstClient.getName()));
         log.info("clientFoundByNameIgnoreCase:{}", clientFoundByNameIgnoreCase);
 
         clientRepository.updateName(firstClient.getId(), "newName");
-        var updatedClient = clientRepository.findById(firstClient.getId())
+        var updatedClient = clientRepository
+                .findById(firstClient.getId())
                 .orElseThrow(() -> new RuntimeException("client not found"));
 
         log.info(">>> updatedClient:{}", updatedClient);
 
-/// проверяем проблему N+1
+        /// проверяем проблему N+1
         log.info(">>> checking N+1 problem");
         var managerId = managerSecond.getId();
         if (managerId == null) {
             throw new IllegalArgumentException("managerId can't be null");
         }
-        var managerN = managerRepository.findById(managerId)
+        var managerN = managerRepository
+                .findById(managerId)
                 .orElseThrow(() -> new RuntimeException("Manager not found, name:" + managerSecond.getId()));
         log.info(">>> managerN:{}", managerN);
 
@@ -132,7 +148,6 @@ public class ActionDemo implements CommandLineRunner {
         log.info("tableWithPk:{}", tableWithPk);
 
         tableWithPkRepository.saveEntry(tableWithPk);
-
 
         TableWithPk loadedTableWithPk = tableWithPkRepository.findById(pk).orElseThrow();
         log.info("loadedTableWithPk:{}", loadedTableWithPk);

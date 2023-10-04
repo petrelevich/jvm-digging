@@ -7,8 +7,6 @@ import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.query.Param;
 
-
-
 public interface ClientRepository extends ListCrudRepository<Client, Long> {
 
     Optional<Client> findByName(String name);

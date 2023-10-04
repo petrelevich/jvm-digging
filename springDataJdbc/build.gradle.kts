@@ -24,8 +24,8 @@ idea {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 group = "ru.demo"
@@ -64,10 +64,11 @@ configurations.all {
     resolutionStrategy {
         failOnVersionConflict()
 
-        force("org.sonarsource.analyzer-commons:sonar-analyzer-commons:2.4.0.1317")
+        force("com.google.guava:guava:32.1.2-jre")
         force("com.google.code.findbugs:jsr305:3.0.2")
-        force("org.sonarsource.sslr:sslr-core:1.24.0.633")
         force("org.eclipse.platform:org.eclipse.osgi:3.18.300")
+        force("org.eclipse.platform:org.eclipse.equinox.common:3.17.100")
+        force("org.sonarsource.sslr:sslr-core:1.24.0.633")
     }
 }
 
@@ -88,7 +89,7 @@ tasks.withType<JavaCompile> {
 
 spotless{
     java {
-        googleJavaFormat("1.16.0").aosp()
+        palantirJavaFormat("2.38.0")
     }
 }
 

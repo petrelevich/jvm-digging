@@ -16,12 +16,13 @@ public class Manager implements Persistable<String> {
     @Id
     @Nonnull
     private final String id;
+
     private final String label;
 
     @MappedCollection(idColumn = "manager_id")
     private final Set<Client> clients;
 
-    @MappedCollection(idColumn = "manager_id", keyColumn= "order_column")
+    @MappedCollection(idColumn = "manager_id", keyColumn = "order_column")
     private final List<Client> clientsOrdered;
 
     @Transient
@@ -64,12 +65,11 @@ public class Manager implements Persistable<String> {
 
     @Override
     public String toString() {
-        return "Manager{" +
-                "id='" + id + '\'' +
-                ", label='" + label + '\'' +
-                ", clients=" + clients +
-                ", clientsOrdered=" + clientsOrdered +
-                ", isNew=" + isNew +
-                '}';
+        return "Manager{" + "id='"
+                + id + '\'' + ", label='"
+                + label + '\'' + ", clients="
+                + clients + ", clientsOrdered="
+                + clientsOrdered + ", isNew="
+                + isNew + '}';
     }
 }

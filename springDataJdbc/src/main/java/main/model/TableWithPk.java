@@ -18,7 +18,8 @@ public class TableWithPk implements Persistable<TableWithPk.Pk> {
 
     private final String value;
 
-    @Transient private final boolean isNew;
+    @Transient
+    private final boolean isNew;
 
     @PersistenceCreator
     public TableWithPk(Pk pk, String value) {

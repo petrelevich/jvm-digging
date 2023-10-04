@@ -8,12 +8,11 @@ import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.query.Param;
 
-
-
 public interface TableWithPkRepository extends ListCrudRepository<TableWithPk, TableWithPk.Pk> {
 
     @Modifying
-    @Query("insert into table_with_pk(id_part1, id_part2, value) VALUES (:#{#tableWithPk.pk.idPart1}, :#{#tableWithPk.pk.idPart2}, :#{#tableWithPk.value})")
+    @Query(
+            "insert into table_with_pk(id_part1, id_part2, value) VALUES (:#{#tableWithPk.pk.idPart1}, :#{#tableWithPk.pk.idPart2}, :#{#tableWithPk.value})")
     void saveEntry(@Nonnull @Param("tableWithPk") TableWithPk tableWithPk);
 
     @Override

@@ -21,15 +21,19 @@ public class ManagerResultSetExtractorClass implements ResultSetExtractor<List<M
             var managerId = rs.getString("manager_id");
             Manager manager = null;
             if (prevManagerId == null || !prevManagerId.equals(managerId)) {
-                manager = new Manager(managerId, rs.getString("manager_label"), new HashSet<>(), new ArrayList<>(), false);
+                manager = new Manager(
+                        managerId, rs.getString("manager_label"), new HashSet<>(), new ArrayList<>(), false);
                 managerList.add(manager);
                 prevManagerId = managerId;
             }
             Long clientId = (Long) rs.getObject("client_id");
-            if (manager !=  null && clientId != null) {
-                manager.getClients().add(
-                        new Client(clientId, rs.getString("client_name"),
-                                managerId, rs.getInt("order_column"),
+            if (manager != null && clientId != null) {
+                manager.getClients()
+                        .add(new Client(
+                                clientId,
+                                rs.getString("client_name"),
+                                managerId,
+                                rs.getInt("order_column"),
                                 new ClientDetails(rs.getString("client_info"))));
             }
         }

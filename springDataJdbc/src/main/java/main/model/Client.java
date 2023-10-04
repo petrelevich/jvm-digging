@@ -11,6 +11,7 @@ public class Client {
 
     @Id
     private final Long id;
+
     @Nonnull
     private final String name;
 
@@ -59,12 +60,11 @@ public class Client {
 
     @Override
     public String toString() {
-        return "Client{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", managerId='" + managerId + '\'' +
-                ", orderColumn=" + orderColumn +
-                ", clientInfo=" + clientDetails +
-                '}';
+        return "Client{" + "id="
+                + id + ", name='"
+                + name + '\'' + ", managerId='"
+                + managerId + '\'' + ", orderColumn="
+                + orderColumn + ", clientInfo="
+                + clientDetails + '}';
     }
 }
