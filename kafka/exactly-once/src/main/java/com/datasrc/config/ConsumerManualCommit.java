@@ -26,7 +26,7 @@ import org.apache.kafka.common.serialization.LongDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ConsumerManualCommit {
+public final class ConsumerManualCommit {
     private static final Logger log = LoggerFactory.getLogger(ConsumerManualCommit.class);
     private final Random random = new Random();
     private final KafkaConsumer<Long, StringValue> kafkaConsumer;

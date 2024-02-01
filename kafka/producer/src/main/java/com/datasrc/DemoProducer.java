@@ -10,7 +10,8 @@ public class DemoProducer {
         var producer = new MyProducer("localhost:9092");
 
         var dataProducer = new DataSender(producer, stringValue -> log.info("asked, value:{}", stringValue));
-        var valueSource = new StringValueSource(dataProducer::dataHandler);
-        valueSource.generate();
+        try (var valueSource = new StringValueSource(dataProducer::dataHandler)) {
+            valueSource.generate();
+        }
     }
 }

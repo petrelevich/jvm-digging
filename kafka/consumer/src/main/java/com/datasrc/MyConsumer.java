@@ -22,7 +22,7 @@ import java.util.Random;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.LongDeserializer;
 
-public class MyConsumer {
+public final class MyConsumer {
     private final Random random = new Random();
     private final KafkaConsumer<Long, StringValue> kafkaConsumer;
 

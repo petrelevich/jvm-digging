@@ -8,6 +8,7 @@ import reactor.test.StepVerifier;
 
 class InfraTest extends BaseTest {
     @Test
+    @SuppressWarnings("java:S2925")
     void checkBlockhoundWorks() {
         var mono = Mono.delay(Duration.ofMillis(1)).doOnNext(it -> {
             try {

@@ -33,7 +33,7 @@ import reactor.kafka.receiver.KafkaReceiver;
 import reactor.kafka.receiver.ReceiverOptions;
 import reactor.util.retry.Retry;
 
-public class ReactiveReceiver {
+public final class ReactiveReceiver {
     private static final Logger log = LoggerFactory.getLogger(ReactiveReceiver.class);
     private final Random random = new Random();
     private final Flux<ConsumerRecord<Long, StringValue>> inboundFlux;
