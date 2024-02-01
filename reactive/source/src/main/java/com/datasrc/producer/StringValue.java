@@ -1,4 +1,3 @@
 package com.datasrc.producer;
 
-public record StringValue(String value) {
-}
+public record StringValue(String value) {}
