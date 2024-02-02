@@ -1,27 +1,43 @@
 package com.datasrc;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
+import com.datasrc.logger.MdcField;
+import java.time.Duration;
+import java.util.function.BiFunction;
+
+import io.micrometer.context.ContextRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Hooks;
 import reactor.core.publisher.SignalType;
 import reactor.core.publisher.Sinks;
+import reactor.core.publisher.SynchronousSink;
+import reactor.core.scheduler.Scheduler;
+import reactor.core.scheduler.Schedulers;
 import reactor.util.annotation.NonNull;
 
 public class SinksDemo implements Sinks.EmitFailureHandler {
     private static final Logger log = LoggerFactory.getLogger(SinksDemo.class);
     private final Sinks.Many<ValueRecord> sink;
-    private final AtomicLong id = new AtomicLong(0);
-    private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+    private static final MdcField mdcField = new MdcField("seed");
+
+    private final Scheduler timer = Schedulers.newParallel("timer-thread", 1);
 
     public static void main(String[] args) {
+        Hooks.enableAutomaticContextPropagation();
+
+        ContextRegistry.getInstance().registerThreadLocalAccessor(
+                mdcField.name(),
+                () -> MDC.get(mdcField.name()),
+                value -> MDC.put(mdcField.name(), String.valueOf(value)),
+                () -> MDC.remove(mdcField.name()));
+
         var sinkDemo = new SinksDemo();
         sinkDemo.emit();
         sinkDemo.receive()
                 .doOnNext(val -> log.info("received valueRecord:{}", val))
+                .contextCapture()
                 .subscribe();
 
         log.info("done");
@@ -32,11 +48,20 @@ public class SinksDemo implements Sinks.EmitFailureHandler {
     }
 
     public void emit() {
-        executor.scheduleAtFixedRate(
-                () -> sink.emitNext(new ValueRecord("value" + id.incrementAndGet()), SinksDemo.this),
-                0,
-                3,
-                TimeUnit.SECONDS);
+        long seed = 133;
+        MDC.put(mdcField.name(), String.valueOf(seed));
+        var stringSeed = "someDataStr:";
+        Flux.generate(() -> seed, (BiFunction<Long, SynchronousSink<Long>, Long>) (prev, sink) -> {
+                    var newValue = prev + 1;
+                    sink.next(newValue);
+                    return newValue;
+                })
+                .delayElements(Duration.ofSeconds(3), timer)
+                .map(val -> new ValueRecord(stringSeed + val))
+                .doOnEach(val -> log.info("debug 100:{}", val))
+                .doOnNext(val -> sink.emitNext(val, SinksDemo.this))
+                .contextCapture()
+                .subscribe();
     }
 
     public Flux<ValueRecord> receive() {

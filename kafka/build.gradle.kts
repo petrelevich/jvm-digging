@@ -36,6 +36,7 @@ allprojects {
     val reactorKafka: String by project
     val blockhound: String by project
     val reactorTest: String by project
+    val propagation: String by project
 
     apply(plugin = "io.spring.dependency-management")
     dependencyManagement {
@@ -48,6 +49,7 @@ allprojects {
             dependency("io.projectreactor.kafka:reactor-kafka:$reactorKafka")
             dependency("io.projectreactor.tools:blockhound:$blockhound")
             dependency("io.projectreactor:reactor-test:$reactorTest")
+            dependency("io.micrometer:context-propagation:$propagation")
         }
     }
     configurations.all {
