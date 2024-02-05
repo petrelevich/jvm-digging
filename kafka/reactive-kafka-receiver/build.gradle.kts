@@ -3,7 +3,7 @@ dependencies {
     implementation ("ch.qos.logback:logback-classic")
     implementation ("com.fasterxml.jackson.core:jackson-databind")
 
-    implementation("io.micrometer:context-propagation:")
+    implementation("io.micrometer:context-propagation")
 
     testImplementation ("org.junit.jupiter:junit-jupiter-engine")
     testImplementation ("org.assertj:assertj-core")
