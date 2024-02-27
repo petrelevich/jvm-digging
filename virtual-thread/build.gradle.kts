@@ -1,6 +1,6 @@
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
-import org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
 import org.gradle.plugins.ide.idea.model.IdeaLanguageLevel
+import org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
 
 plugins {
     idea
@@ -22,18 +22,12 @@ idea {
 }
 
 allprojects {
-    group = "ru.otus"
+    group = "ru.demo"
 
     repositories {
         mavenLocal()
         mavenCentral()
     }
-
-    val testcontainersBom: String by project
-    val protobufBom: String by project
-    val guava: String by project
-    val jmh: String by project
-    val asm: String by project
 
     apply(plugin = "io.spring.dependency-management")
     dependencyManagement {
