@@ -1,0 +1,13 @@
+server:
+  port: 8080
+
+application:
+  rest:
+    api:
+      prefix: /api
+
+spring:
+  threads:
+    virtual:
+      enabled: true
+
