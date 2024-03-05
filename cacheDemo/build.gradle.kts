@@ -1,13 +1,13 @@
 plugins {
     java
-    id("io.spring.dependency-management") version "1.1.0"
-    id("name.remal.sonarlint") version "3.0.9"
-    id("com.diffplug.spotless") version "6.17.0"
+    id("io.spring.dependency-management") version "1.1.4"
+    id("name.remal.sonarlint") version "3.4.9"
+    id("com.diffplug.spotless") version "6.25.0"
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 group = "ru.demo"
@@ -21,15 +21,15 @@ apply(plugin = "io.spring.dependency-management")
 dependencyManagement {
     dependencies {
         imports {
-            mavenBom("org.springframework.boot:spring-boot-dependencies:3.0.5")
+            mavenBom("org.springframework.boot:spring-boot-dependencies:3.2.3")
         }
     }
 }
 
 dependencies {
     implementation("ch.qos.logback:logback-classic")
-    implementation("org.ehcache:ehcache:3.10.6")
-    implementation("com.github.ben-manes.caffeine:caffeine:3.1.5")
+    implementation("org.ehcache:ehcache:3.10.8")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
 
     testImplementation("org.assertj:assertj-core")
     testImplementation ("org.junit.jupiter:junit-jupiter-api")
