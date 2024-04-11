@@ -1,0 +1,32 @@
+micronaut:
+  application:
+    name: demo
+  metrics:
+    enabled: true
+    export:
+      prometheus:
+        enabled: true
+        descriptions: true
+
+endpoints:
+  prometheus:
+    sensitive: false
+
+
+datasources:
+  demoDB:
+    url: jdbc:postgresql://localhost:5430/demoDB
+    username: usr
+    password: pwd
+r2dbc:
+  datasources:
+    demoDBr:
+      url: r2dbc:postgresql://localhost:5430/demoDB
+      username: usr
+      password: pwd
+
+flyway:
+  datasources:
+    demoDB:
+      enabled: true
+      locations: classpath:db/migration

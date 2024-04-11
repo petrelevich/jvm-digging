@@ -1,0 +1,7 @@
+curl -X POST http://localhost:8080/value --header "Content-Type: application/json" -d '{"val":"StrVal1"}'
+
+curl -X GET http://localhost:8080/value/2
+
+---
+curl -X GET http://localhost:8080/health
+curl -X GET http://localhost:8080/prometheus
