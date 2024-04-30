@@ -3,8 +3,6 @@ package ru.petrelevich;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
-import io.micronaut.runtime.server.EmbeddedServer;
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import org.junit.jupiter.api.Test;
 
 import jakarta.inject.Inject;
@@ -12,8 +10,7 @@ import reactor.test.StepVerifier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@MicronautTest
-class UserValueControllerTest {
+class UserValueControllerTest extends DatabaseTestBase {
 
     @Inject
     @Client("/")

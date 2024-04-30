@@ -39,6 +39,8 @@ dependencies {
     testImplementation("io.micronaut:micronaut-http-client")
     testImplementation ("org.assertj:assertj-core")
     testImplementation("io.projectreactor:reactor-test")
+    testImplementation("org.testcontainers:testcontainers")
+    testImplementation("org.testcontainers:postgresql")
 }
 
 
