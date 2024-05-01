@@ -1,12 +1,10 @@
 package ru.petrelevich;
 
-import io.micronaut.http.HttpRequest;
 import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
 import org.junit.jupiter.api.Test;
 
 import jakarta.inject.Inject;
-import org.reactivestreams.Subscriber;
 import reactor.test.StepVerifier;
 
 import static io.micronaut.http.HttpRequest.GET;
@@ -46,12 +44,12 @@ class UserValueControllerTest extends DatabaseTestBase {
                         .header("Content-Type", "application/json"));
 
         StepVerifier.create(creationResponse)
-                .consumeNextWith(insertedId -> {
-                        StepVerifier.create(client.retrieve(GET(String.format("/value/%d", Long.valueOf(insertedId)))))
+                .consumeNextWith(insertedId ->
+                        StepVerifier.create(client.retrieve(
+                                        GET(String.format("/value/%d", Long.valueOf(insertedId)))))
                                 .expectNext(value)
                                 .expectComplete()
-                                .verify();
-                }).expectComplete()
+                                .verify()).expectComplete()
                 .verify();
     }
 }

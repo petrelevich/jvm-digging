@@ -9,8 +9,7 @@ import jakarta.inject.Inject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@MicronautTest
-class DemoTest {
+class DemoTest extends DatabaseTestBase {
 
     @Inject
     EmbeddedApplication<?> application;
