@@ -1,0 +1,9 @@
+server:
+  port: 8080
+
+application:
+  init-value: 100
+  client-name: "counter-1"
+  redis:
+    url: "localhost:6379"
+    password: "passWd"
