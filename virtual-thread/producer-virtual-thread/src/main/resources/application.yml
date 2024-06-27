@@ -1,0 +1,11 @@
+server:
+  port: 8080
+
+spring:
+  threads:
+    virtual:
+      enabled: true
+
+application:
+  kafka-bootstrap-servers: localhost:9092
+  topic-request: request

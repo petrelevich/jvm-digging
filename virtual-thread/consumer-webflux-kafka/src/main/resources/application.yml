@@ -1,0 +1,7 @@
+server:
+  port: 8080
+
+application:
+  kafka-bootstrap-servers: localhost:9092
+  topic-request: request
+  topic-response: response

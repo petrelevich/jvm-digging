@@ -3,6 +3,11 @@ rootProject.name = "virtual-thread"
 include("base")
 include("springBoot")
 
+include("producer-webflux-kafka")
+include("producer-virtual-thread")
+include("consumer-webflux-kafka")
+include("kafka-request-processor")
+
 pluginManagement {
     val jgitver: String by settings
     val dependencyManagement: String by settings

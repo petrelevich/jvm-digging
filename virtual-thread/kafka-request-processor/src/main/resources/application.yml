@@ -1,0 +1,4 @@
+application:
+  kafka-bootstrap-servers: localhost:9092
+  topic-request: request
+  topic-response: response

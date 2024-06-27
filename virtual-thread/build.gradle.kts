@@ -29,12 +29,15 @@ allprojects {
         mavenCentral()
     }
 
+    val propagation: String by project
+
     apply(plugin = "io.spring.dependency-management")
     dependencyManagement {
         dependencies {
             imports {
                 mavenBom(BOM_COORDINATES)
             }
+            dependency("io.micrometer:context-propagation:$propagation")
         }
     }
 
