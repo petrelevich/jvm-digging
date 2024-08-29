@@ -2,11 +2,10 @@ package ru.demo.mainpackage.json;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.kafka.common.errors.SerializationException;
-import org.apache.kafka.common.serialization.Deserializer;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import org.apache.kafka.common.errors.SerializationException;
+import org.apache.kafka.common.serialization.Deserializer;
 
 public class JsonDeserializer<T> implements Deserializer<T> {
     public static final String OBJECT_MAPPER = "objectMapper";

@@ -1,5 +1,8 @@
 package ru.demo.mainpackage;
 
+import java.time.Duration;
+import java.util.List;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.ConnectableFlux;
@@ -11,10 +14,6 @@ import reactor.util.annotation.NonNull;
 import ru.demo.mainpackage.model.RequestId;
 import ru.demo.mainpackage.model.Response;
 import ru.demo.mainpackage.model.ResponseSum;
-
-import java.time.Duration;
-import java.util.List;
-import java.util.Set;
 
 public class ResponseStorage implements Sinks.EmitFailureHandler {
 
@@ -51,10 +50,8 @@ public class ResponseStorage implements Sinks.EmitFailureHandler {
                 .map(responses -> {
                     var sum = responses.stream().mapToLong(Response::data).sum();
                     return new ResponseSum(requestId, sum);
-                })
-                .contextCapture();
+                });
     }
-
 
     @Override
     public boolean onEmitFailure(@NonNull SignalType signalType, @NonNull Sinks.EmitResult emitResult) {

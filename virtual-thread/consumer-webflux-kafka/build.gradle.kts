@@ -7,7 +7,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation ("org.apache.kafka:kafka-clients")
     implementation("com.fasterxml.jackson.core:jackson-databind")
-    implementation("io.micrometer:context-propagation")
 }
 
 jib {

@@ -1,4 +1,3 @@
 package ru.demo.mainpackage.model;
 
-public record RequestId(long value) {
-}
+public record RequestId(long value) {}

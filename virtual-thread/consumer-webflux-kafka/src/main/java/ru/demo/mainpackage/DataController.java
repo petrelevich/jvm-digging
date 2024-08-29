@@ -2,10 +2,8 @@ package ru.demo.mainpackage;
 
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,8 +13,6 @@ import ru.demo.mainpackage.kafka.KafkaProducer;
 import ru.demo.mainpackage.model.Request;
 import ru.demo.mainpackage.model.RequestId;
 import ru.demo.mainpackage.model.ResponseSum;
-
-import static ru.demo.mainpackage.ConsumerKafkaDemo.MDC_FIELD_REQUEST_ID;
 
 @RestController
 public class DataController {
@@ -39,16 +35,15 @@ public class DataController {
     @PostMapping(value = "/request", produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseSum> responseSum(@RequestBody long requestData) {
         var request = new Request(new RequestId(idGenerator.incrementAndGet()), requestData);
-        MDC.put(MDC_FIELD_REQUEST_ID.name(), String.valueOf(request.id().value()));
         log.info("requestData:{}", requestData);
 
         kafkaProducer.send(request);
-        return stringValueStorage.get(request.id(), producersForWait)
+        return stringValueStorage
+                .get(request.id(), producersForWait)
                 .onErrorResume(error -> {
                     log.info("kafka timeout");
                     return Mono.just(new ResponseSum(request.id(), null));
                 })
-                .doOnNext(response -> log.info("response:{}", response))
-                .contextCapture();
+                .doOnNext(response -> log.info("response:{}", response));
     }
 }

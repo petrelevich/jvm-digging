@@ -1,9 +1,6 @@
 package ru.demo.mainpackage.config;
 
 import io.netty.channel.nio.NioEventLoopGroup;
-
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,8 +12,8 @@ import org.springframework.context.annotation.Configuration;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 import reactor.util.annotation.NonNull;
-import ru.demo.mainpackage.kafka.KafkaConsumer;
 import ru.demo.mainpackage.ResponseStorage;
+import ru.demo.mainpackage.kafka.KafkaConsumer;
 import ru.demo.mainpackage.kafka.KafkaProducer;
 
 @Configuration
@@ -49,13 +46,13 @@ public class ApplConfig {
     }
 
     @Bean(destroyMethod = "close")
-    public KafkaConsumer kafkaConsumer(@Value("${application.kafka-bootstrap-servers}") String bootstrapServers,
-                                       @Value("${application.topic-response}") String topicResponse,
-                                       ResponseStorage stringValueStorage
-                             ) {
+    public KafkaConsumer kafkaConsumer(
+            @Value("${application.kafka-bootstrap-servers}") String bootstrapServers,
+            @Value("${application.topic-response}") String topicResponse,
+            ResponseStorage stringValueStorage) {
         var consumer = new KafkaConsumer(bootstrapServers, topicResponse);
         Thread.ofVirtual().name("kafka-consumer").start(() -> {
-            while(!Thread.currentThread().isInterrupted()) {
+            while (!Thread.currentThread().isInterrupted()) {
                 var responses = consumer.poll();
                 stringValueStorage.put(responses);
             }
@@ -65,8 +62,9 @@ public class ApplConfig {
     }
 
     @Bean(destroyMethod = "close")
-    public KafkaProducer kafkaProducer(@Value("${application.kafka-bootstrap-servers}") String bootstrapServers,
-                                       @Value("${application.topic-request}") String topicRequest) {
+    public KafkaProducer kafkaProducer(
+            @Value("${application.kafka-bootstrap-servers}") String bootstrapServers,
+            @Value("${application.topic-request}") String topicRequest) {
         return new KafkaProducer(bootstrapServers, topicRequest);
     }
 

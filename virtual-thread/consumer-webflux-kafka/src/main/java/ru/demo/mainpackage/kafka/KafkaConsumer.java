@@ -1,24 +1,5 @@
 package ru.demo.mainpackage.kafka;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.common.serialization.LongDeserializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ru.demo.mainpackage.json.JsonDeserializer;
-import ru.demo.mainpackage.model.Request;
-import ru.demo.mainpackage.model.Response;
-
-import java.net.InetAddress;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
-import java.util.Random;
-
 import static org.apache.kafka.clients.CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG;
 import static org.apache.kafka.clients.CommonClientConfigs.GROUP_ID_CONFIG;
 import static org.apache.kafka.clients.CommonClientConfigs.GROUP_INSTANCE_ID_CONFIG;
@@ -31,6 +12,23 @@ import static org.apache.kafka.clients.consumer.ConsumerConfig.MAX_POLL_RECORDS_
 import static org.apache.kafka.clients.consumer.ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG;
 import static ru.demo.mainpackage.config.JsonSerializer.OBJECT_MAPPER;
 import static ru.demo.mainpackage.json.JsonDeserializer.TYPE_REFERENCE;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.InetAddress;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Properties;
+import java.util.Random;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.common.serialization.LongDeserializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.demo.mainpackage.json.JsonDeserializer;
+import ru.demo.mainpackage.model.Response;
 
 public final class KafkaConsumer {
     private static final Logger log = LoggerFactory.getLogger(KafkaConsumer.class);
