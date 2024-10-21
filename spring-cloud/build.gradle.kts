@@ -37,27 +37,20 @@ allprojects {
         resolutionStrategy {
             failOnVersionConflict()
 
-            force("com.google.guava:guava:32.1.2-jre")
-
-            force("org.apache.httpcomponents:httpclient:4.5.14")
-            force("org.glassfish.hk2:hk2-api:3.1.1")
-            force("com.fasterxml.woodstox:woodstox-core:6.5.1")
-            force("commons-logging:commons-logging:1.3.1")
-            force("org.glassfish.hk2:hk2-utils:3.1.1")
             force("org.glassfish.hk2.external:aopalliance-repackaged:3.1.1")
-
-//            force("commons-logging:commons-logging:1.1.1")
-//            force("commons-lang:commons-lang:2.5")
-//            force("org.codehaus.jackson:jackson-core-asl:1.8.8")
-//            force("org.codehaus.jackson:jackson-mapper-asl:1.8.8")
-//            force("org.sonarsource.analyzer-commons:sonar-analyzer-commons:2.8.0.2699")
-//            force("org.sonarsource.analyzer-commons:sonar-xml-parsing:2.8.0.2699")
-//            force("org.sonarsource.sslr:sslr-core:1.24.0.633")
-//            force("org.sonarsource.analyzer-commons:sonar-analyzer-recognizers:2.8.0.2699")
-//            force("com.google.code.findbugs:jsr305:3.0.2")
-//            force("commons-io:commons-io:2.15.1")
-//            force("com.google.errorprone:error_prone_annotations:2.26.1")
-//            force("com.google.j2objc:j2objc-annotations:3.0.0")
+            force("org.glassfish.hk2:hk2-utils:3.1.1")
+            force("commons-logging:commons-logging:1.3.1")
+            force("com.fasterxml.woodstox:woodstox-core:6.6.2")
+            force("org.glassfish.hk2:hk2-api:3.1.1")
+            force("org.apache.httpcomponents:httpclient:4.5.14")
+            force("org.sonarsource.analyzer-commons:sonar-analyzer-commons:2.11.0.2861")
+            force("org.sonarsource.analyzer-commons:sonar-xml-parsing:2.11.0.2861")
+            force("org.sonarsource.sslr:sslr-core:1.24.0.633")
+            force("org.sonarsource.analyzer-commons:sonar-analyzer-recognizers:2.11.0.2861")
+            force("commons-io:commons-io:2.15.1")
+            force("com.google.guava:guava:32.1.3-jre")
+            force("com.google.code.findbugs:jsr305:3.0.2")
+            force("org.codehaus.woodstox:stax2-api:4.2.2")
         }
     }
 }
