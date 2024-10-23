@@ -51,6 +51,7 @@ allprojects {
             force("com.google.guava:guava:32.1.3-jre")
             force("com.google.code.findbugs:jsr305:3.0.2")
             force("org.codehaus.woodstox:stax2-api:4.2.2")
+            force("io.opentelemetry:opentelemetry-api-incubator:1.38.0-alpha")
         }
     }
 }

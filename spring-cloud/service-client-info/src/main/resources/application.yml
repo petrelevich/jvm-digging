@@ -1,6 +1,6 @@
 spring:
   application:
-    name: service-client
+    name: service-client-info
   cloud:
     config:
       fail-fast: true
@@ -16,7 +16,7 @@ spring:
 
 eureka:
   client:
-    fetchRegistry: true
+    fetchRegistry: false
     serviceUrl:
       defaultZone: http://localhost:9999/eureka/
   instance:

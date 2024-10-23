@@ -4,4 +4,7 @@ dependencies {
     implementation("ch.qos.logback:logback-classic")
 
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+
+    implementation("io.micrometer:micrometer-tracing-bridge-otel") // bridges the Micrometer Observation API to OpenTelemetry.
+    implementation("io.opentelemetry:opentelemetry-exporter-zipkin") // reports traces to Zipkin.
 }

@@ -1,6 +1,7 @@
 spring:
   application:
     name: service-order
+    instance_id: i0
   cloud:
     config:
       fail-fast: true

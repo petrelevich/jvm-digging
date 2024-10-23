@@ -11,6 +11,9 @@ spring:
           ignoreLocalSshSettings: false
           strictHostKeyChecking: false
 management:
+  tracing:
+    sampling:
+      probability: 1.0
   endpoint:
     prometheus:
       enabled: true

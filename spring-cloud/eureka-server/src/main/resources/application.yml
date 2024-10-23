@@ -17,6 +17,9 @@ eureka:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
 
 management:
+  tracing:
+    sampling:
+      probability: 1.0
   endpoint:
     prometheus:
       enabled: true
