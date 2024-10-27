@@ -1,0 +1,6 @@
+server:
+  port: 8070
+
+application:
+  delay-sec: 1
+  multiplier: 10

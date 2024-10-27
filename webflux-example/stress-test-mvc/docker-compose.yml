@@ -1,0 +1,24 @@
+services:
+  ecco:
+    image: nodstuff/gecho:latest
+    container_name: ecco
+    ports:
+      - "8080:8080"
+    restart: always
+
+  stress-test:
+    image: localrun/stress-test-mvc:latest
+    container_name: stress-test-mvc
+    ports:
+      - "8070:8070"
+    restart: always
+    environment:
+      LOGGING_LEVEL_RU_DEMO: INFO
+      APPLICATION_DATA-SOURCE: "http://ecco:8080"
+      JAVA_TOOL_OPTIONS: "-XX:InitialRAMPercentage=80 -XX:MaxRAMPercentage=80"
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "256M"
+

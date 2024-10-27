@@ -1,0 +1,8 @@
+server:
+  port: 8080
+
+application:
+  adviser-1: http://localhost:8071
+  adviser-2: http://localhost:8072
+  adviser-3: http://localhost:8073
+

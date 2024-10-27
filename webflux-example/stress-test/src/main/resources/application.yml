@@ -1,0 +1,6 @@
+server:
+  port: 8070
+
+application:
+  data-source: http://localhost:8090
+

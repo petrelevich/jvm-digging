@@ -1,0 +1,8 @@
+server:
+  port: 8080
+
+application:
+  multiplier-1: http://localhost:8071
+  multiplier-2: http://localhost:8072
+  multiplier-3: http://localhost:8073
+

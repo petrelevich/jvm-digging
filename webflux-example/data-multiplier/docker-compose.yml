@@ -1,0 +1,51 @@
+services:
+  data-multiplier-1:
+    image: localrun/data-multiplier:latest
+    container_name: data-multiplier-1
+    ports:
+      - "8071:8070"
+    restart: always
+    environment:
+      LOGGING_LEVEL_RU_DEMO: INFO
+      APPLICATION_DELAY-SEC: 2
+      APPLICATION_MULTIPLIER: 10
+      JAVA_TOOL_OPTIONS: "-XX:InitialRAMPercentage=80 -XX:MaxRAMPercentage=80"
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "256M"
+
+  data-multiplier-2:
+    image: localrun/data-multiplier:latest
+    container_name: data-multiplier-2
+    ports:
+      - "8072:8070"
+    restart: always
+    environment:
+      LOGGING_LEVEL_RU_DEMO: INFO
+      APPLICATION_DELAY-SEC: 10
+      APPLICATION_MULTIPLIER: 20
+      JAVA_TOOL_OPTIONS: "-XX:InitialRAMPercentage=80 -XX:MaxRAMPercentage=80"
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "256M"
+
+  data-multiplier-3:
+    image: localrun/data-multiplier:latest
+    container_name: data-multiplier-3
+    ports:
+      - "8073:8070"
+    restart: always
+    environment:
+      LOGGING_LEVEL_RU_DEMO: INFO
+      APPLICATION_DELAY-SEC: 15
+      APPLICATION_MULTIPLIER: 30
+      JAVA_TOOL_OPTIONS: "-XX:InitialRAMPercentage=80 -XX:MaxRAMPercentage=80"
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "256M"
