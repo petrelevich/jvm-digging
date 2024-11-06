@@ -5,6 +5,8 @@ include("stress-test-mvc")
 include("aggregator")
 include("decision-maker")
 include("data-multiplier")
+include("cpu-bound")
+include("cpu-bound-mvc")
 
 
 pluginManagement {

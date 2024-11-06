@@ -1,0 +1,17 @@
+services:
+
+  cpu-bound:
+    image: localrun/cpu-bound-mvc:latest
+    container_name: cpu-bound-mvc
+    ports:
+      - "8070:8070"
+    restart: always
+    environment:
+      LOGGING_LEVEL_RU_DEMO: TRACE
+      JAVA_TOOL_OPTIONS: "-XX:InitialRAMPercentage=80 -XX:MaxRAMPercentage=80"
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: "256M"
+
