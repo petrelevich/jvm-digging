@@ -2,6 +2,8 @@ package com.datasrc.config;
 
 import com.datasrc.MultiplierClient;
 import io.netty.channel.nio.NioEventLoopGroup;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.embedded.netty.NettyReactiveWebServerFactory;
@@ -12,9 +14,6 @@ import org.springframework.http.client.ReactorResourceFactory;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.util.annotation.NonNull;
-
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Configuration
 public class ApplConfig {
@@ -69,17 +68,20 @@ public class ApplConfig {
     }
 
     @Bean("multiplierClient1")
-    public MultiplierClient multiplierClient1(WebClient.Builder builder, @Value("${application.multiplier-1}") String url) {
+    public MultiplierClient multiplierClient1(
+            WebClient.Builder builder, @Value("${application.multiplier-1}") String url) {
         return new MultiplierClient(builder.baseUrl(url).build(), "multiplierClient1");
     }
 
     @Bean("multiplierClient2")
-    public MultiplierClient multiplierClient2(WebClient.Builder builder, @Value("${application.multiplier-2}") String url) {
+    public MultiplierClient multiplierClient2(
+            WebClient.Builder builder, @Value("${application.multiplier-2}") String url) {
         return new MultiplierClient(builder.baseUrl(url).build(), "multiplierClient2");
     }
 
     @Bean("multiplierClient3")
-    public MultiplierClient multiplierClient3(WebClient.Builder builder, @Value("${application.multiplier-3}") String url) {
+    public MultiplierClient multiplierClient3(
+            WebClient.Builder builder, @Value("${application.multiplier-3}") String url) {
         return new MultiplierClient(builder.baseUrl(url).build(), "multiplierClient3");
     }
 }

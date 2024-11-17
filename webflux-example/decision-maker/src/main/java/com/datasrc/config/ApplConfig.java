@@ -2,6 +2,8 @@ package com.datasrc.config;
 
 import com.datasrc.AdviserClient;
 import io.netty.channel.nio.NioEventLoopGroup;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.embedded.netty.NettyReactiveWebServerFactory;
@@ -14,9 +16,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 import reactor.util.annotation.NonNull;
-
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Configuration
 public class ApplConfig {
@@ -74,7 +73,6 @@ public class ApplConfig {
     public Scheduler timeoutTimer() {
         return Schedulers.newBoundedElastic(50, 1000, "timeout-Scheduler", 5, true);
     }
-
 
     @Bean("adviserClient1")
     public AdviserClient multiplierClient1(WebClient.Builder builder, @Value("${application.adviser-1}") String url) {

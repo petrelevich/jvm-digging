@@ -1,16 +1,15 @@
 package com.datasrc;
 
+import static org.springframework.http.MediaType.TEXT_EVENT_STREAM_VALUE;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import static org.springframework.http.MediaType.TEXT_EVENT_STREAM_VALUE;
 
 @RestController
 public class AggregatorController {
@@ -19,14 +18,17 @@ public class AggregatorController {
     private final MultiplierClient multiplierClient2;
     private final MultiplierClient multiplierClient3;
 
-    public AggregatorController(MultiplierClient multiplierClient1, MultiplierClient multiplierClient2, MultiplierClient multiplierClient3) {
+    public AggregatorController(
+            MultiplierClient multiplierClient1,
+            MultiplierClient multiplierClient2,
+            MultiplierClient multiplierClient3) {
         this.multiplierClient1 = multiplierClient1;
         this.multiplierClient2 = multiplierClient2;
         this.multiplierClient3 = multiplierClient3;
     }
 
-/*
-    curl http://localhost:8080/agg/1
+    /*
+    curl -v http://localhost:8080/agg/1
      */
 
     @GetMapping(value = "/agg/{id}", produces = TEXT_EVENT_STREAM_VALUE)
@@ -43,7 +45,8 @@ public class AggregatorController {
     }
 
     private Mono<String> doRequest(MultiplierClient multiplierClient, long id) {
-        return multiplierClient.client()
+        return multiplierClient
+                .client()
                 .get()
                 .uri("/multiplier?value={id}", id)
                 .accept(MediaType.APPLICATION_JSON)

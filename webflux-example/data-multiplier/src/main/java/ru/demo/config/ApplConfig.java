@@ -9,8 +9,7 @@ public class ApplConfig {
 
     @Bean
     public ApplParams applParams(
-            @Value("${application.delay-sec}") int delaySec,
-            @Value("${application.multiplier}") int multiplier) {
+            @Value("${application.delay-sec}") int delaySec, @Value("${application.multiplier}") int multiplier) {
         return new ApplParams(delaySec, multiplier);
     }
 }
