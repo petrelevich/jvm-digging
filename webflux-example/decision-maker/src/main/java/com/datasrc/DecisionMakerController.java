@@ -61,7 +61,7 @@ public class DecisionMakerController {
                 .map(results -> results.stream().reduce(0L, Long::sum))
                 .map(result -> result > 100 ? OK : FAIL)
                 .onErrorResume(error -> {
-                    log.info("request timeout");
+                    log.info("error handler");
                     return Mono.just(FAIL);
                 }).doOnNext(result -> log.info("result:{}", result));
     }
