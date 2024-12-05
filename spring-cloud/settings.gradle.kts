@@ -23,3 +23,5 @@ include("eureka-server")
 include("service-client")
 include("service-client-info")
 include("service-order")
+
+include("kafka-log-appender")
