@@ -10,31 +10,38 @@ import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.demo.metrics.Meter;
+import ru.demo.metrics.MetricsManager;
+import ru.demo.model.RequestForData;
 
 import java.net.URI;
 
 import static ru.demo.filter.MdcFilter.MDC_REQUEST_ID;
+import static ru.demo.metrics.Meter.REQUEST_COUNTER;
 
 
 @RestController
 public class ClientController {
     private static final Logger log = LoggerFactory.getLogger(ClientController.class);
 
+    private final MetricsManager metricsManager;
     private final ClientAdditionalInfoClient clientAdditionalInfoClient;
     private final EurekaClient discoveryClient;
-    private final CheckedFunction<String, String> getAdditionalInfoFunction;
+    private final CheckedFunction<RequestForData, String> getAdditionalInfoFunction;
 
     //curl -v -H "X-Request-Id: 123" http://localhost:8081/info?name="testClient"
 
-    public ClientController(ClientAdditionalInfoClient clientAdditionalInfoClient,
+    public ClientController(MetricsManager metricsManager,
+            ClientAdditionalInfoClient clientAdditionalInfoClient,
                             EurekaClient discoveryClient,
                             CircuitBreaker circuitBreaker,
                             RateLimiter rateLimiter) {
+        this.metricsManager = metricsManager;
         this.clientAdditionalInfoClient = clientAdditionalInfoClient;
         this.discoveryClient = discoveryClient;
 
         this.getAdditionalInfoFunction = RateLimiter.decorateCheckedFunction(rateLimiter,
-                name -> circuitBreaker.run(() -> getAdditionalInfo(name),
+                requestForData -> circuitBreaker.run(() -> doRequest(requestForData),
                         t -> {
                             log.error("delay call failed error:{}", t.getMessage());
                             return "unknown info";
@@ -43,14 +50,29 @@ public class ClientController {
 
     @GetMapping(value = "/info")
     public String info(@RequestParam(name = "name") String name) {
+        var startTime = System.currentTimeMillis();
+        metricsManager.incrementValue(REQUEST_COUNTER);
         log.info("request. name:{}", name);
         String additionalInfo = null;
         try {
-            additionalInfo = getAdditionalInfoFunction.apply(name);
+            additionalInfo = getAdditionalInfoFunction.apply(new RequestForData(name, MDC.get(MDC_REQUEST_ID)));
         } catch (Throwable ex) {
             log.error("can't execute additional info, name:{}, error:{}", name, ex.getMessage());
         }
-        return String.format("ClientInfo name:%s, additional:%s", name, additionalInfo);
+        var requestResult = String.format("ClientInfo name:%s, additional:%s", name, additionalInfo);
+
+        var duration = System.currentTimeMillis() - startTime;
+        metricsManager.putValue(Meter.REQUEST_DURATION, duration);
+        return requestResult;
+    }
+
+    private String doRequest(RequestForData requestForData) {
+        try {
+            MDC.put(MDC_REQUEST_ID, requestForData.requestId());
+            return getAdditionalInfo(requestForData.name());
+        } finally {
+            MDC.remove(MDC_REQUEST_ID);
+        }
     }
 
     private String getAdditionalInfo(String name) {

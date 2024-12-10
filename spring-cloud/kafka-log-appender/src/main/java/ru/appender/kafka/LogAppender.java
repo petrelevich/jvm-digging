@@ -19,12 +19,7 @@ public class LogAppender extends UnsynchronizedAppenderBase<LoggingEvent> {
     private Thread senderThread;
     private Encoder<LoggingEvent> encoder;
 
-    private final ErrorMsgConsumer errorMsgConsumer = new ErrorMsgConsumer() {
-        @Override
-        public void accept(String error) {
-            addError(String.format(MESSAGE_TEMPLATE, error));
-        }
-    };
+    private final ErrorMsgConsumer errorMsgConsumer = error -> addError(String.format(MESSAGE_TEMPLATE, error));
 
     public void setEncoder(Encoder<LoggingEvent> encoder) {
         this.encoder = encoder;

@@ -26,6 +26,6 @@ public class ClientController {
     }
 
     private void doJob() throws InterruptedException {
-        Thread.sleep(Duration.ofSeconds(1));
+        Thread.sleep(Duration.ofMillis(100));
     }
 }

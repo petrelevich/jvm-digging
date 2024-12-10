@@ -1,6 +1,6 @@
 spring:
   application:
-    name: demo-api-gateway
+    name: api-gateway
 
 
 server:

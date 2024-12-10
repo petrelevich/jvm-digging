@@ -15,6 +15,7 @@
                 <version>[ignore]</version>
             </fieldNames>
             <customFields>{"appname":"service-client"}</customFields>
+            <includeMdcKeyName>requestId</includeMdcKeyName>
         </encoder>
     </appender>
 

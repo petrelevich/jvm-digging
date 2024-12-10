@@ -10,6 +10,7 @@ import org.slf4j.MDC;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MdcFilter extends OncePerRequestFilter {
     private final Logger log = LoggerFactory.getLogger(MdcFilter.class);
@@ -25,10 +26,11 @@ public class MdcFilter extends OncePerRequestFilter {
         }
 
         var headerIterator = request.getHeaderNames().asIterator();
+        var headers = new ArrayList<String>();
         while (headerIterator.hasNext()) {
-            var header = headerIterator.next();
-            log.info("request header:{}", header);
+            headers.add(headerIterator.next());
         }
+        log.info("request headers:{}", headers);
 
         response.addHeader(HEADER_X_REQUEST_ID, xRequestId);
         filterChain.doFilter(request, response);

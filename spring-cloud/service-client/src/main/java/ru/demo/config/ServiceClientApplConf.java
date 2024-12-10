@@ -29,6 +29,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.filter.OncePerRequestFilter;
+import ru.demo.metrics.MetricsManager;
+import ru.demo.metrics.MicrometerMetricsManager;
 
 import java.time.Duration;
 
@@ -40,8 +42,8 @@ public class ServiceClientApplConf {
     public RateLimiterConfig rateLimiterConfig() {
         return RateLimiterConfig.custom()
                 .timeoutDuration(Duration.ofMillis(100))
-                .limitRefreshPeriod(Duration.ofSeconds(30))
-                .limitForPeriod(1)
+                .limitRefreshPeriod(Duration.ofSeconds(1))
+                .limitForPeriod(1000)
                 .build();
     }
 
@@ -96,4 +98,8 @@ public class ServiceClientApplConf {
                 .target(ClientAdditionalInfoClient.class,"http");
     }
 
+    @Bean
+    public MetricsManager micrometerMetricsManager(MeterRegistry meterRegistry) {
+        return new MicrometerMetricsManager(meterRegistry);
+    }
 }
