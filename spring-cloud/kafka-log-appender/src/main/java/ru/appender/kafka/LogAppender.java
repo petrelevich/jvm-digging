@@ -3,10 +3,8 @@ package ru.appender.kafka;
 import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.UnsynchronizedAppenderBase;
 import ch.qos.logback.core.encoder.Encoder;
-
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
-
 
 public class LogAppender extends UnsynchronizedAppenderBase<LoggingEvent> {
     private static final String MESSAGE_TEMPLATE = "[Kafka appender] %s";

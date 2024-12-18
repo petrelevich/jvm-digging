@@ -1,4 +1,3 @@
 package ru.demo.model;
 
-public record RequestForData(String name, String requestId) {
-}
+public record RequestForData(String name, String requestId) {}

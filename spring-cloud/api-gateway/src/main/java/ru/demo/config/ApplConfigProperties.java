@@ -25,9 +25,6 @@ public class ApplConfigProperties {
 
     @Override
     public String toString() {
-        return "ApplConfigProperties{" +
-                "authHost='" + authHost + '\'' +
-                ", apiRoutes=" + apiRoutes +
-                '}';
+        return "ApplConfigProperties{" + "authHost='" + authHost + '\'' + ", apiRoutes=" + apiRoutes + '}';
     }
 }

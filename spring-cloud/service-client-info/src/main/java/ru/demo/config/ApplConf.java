@@ -1,10 +1,10 @@
 package ru.demo.config;
 
-import ru.demo.filter.MdcFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.OncePerRequestFilter;
+import ru.demo.filter.MdcFilter;
 
 @Configuration
 public class ApplConf {

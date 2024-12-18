@@ -16,9 +16,8 @@ public class XrequestFilter implements GatewayFilter {
         var guid = java.util.UUID.randomUUID().toString();
         log.info("requestId:{}", guid);
 
-        var request = exchange.getRequest().mutate()
-                .header(HEADER_X_REQUEST_ID, guid)
-                .build();
+        var request =
+                exchange.getRequest().mutate().header(HEADER_X_REQUEST_ID, guid).build();
 
         return chain.filter(exchange.mutate().request(request).build());
     }

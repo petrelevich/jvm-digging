@@ -4,13 +4,12 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class MdcFilter extends OncePerRequestFilter {
     private final Logger log = LoggerFactory.getLogger(MdcFilter.class);
@@ -18,7 +17,8 @@ public class MdcFilter extends OncePerRequestFilter {
     private static final String MDC_REQUEST_ID = "requestId";
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         var xRequestId = request.getHeader(HEADER_X_REQUEST_ID);
         log.info("method:{}, xRequestId:{}", request.getMethod(), xRequestId);
         if (xRequestId != null) {

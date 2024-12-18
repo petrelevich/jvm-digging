@@ -1,8 +1,12 @@
 package ru.demo.controller;
 
+import static ru.demo.filter.MdcFilter.MDC_REQUEST_ID;
+import static ru.demo.metrics.Meter.REQUEST_COUNTER;
+
 import com.netflix.discovery.EurekaClient;
 import io.github.resilience4j.core.functions.CheckedFunction;
 import io.github.resilience4j.ratelimiter.RateLimiter;
+import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -14,12 +18,6 @@ import ru.demo.metrics.Meter;
 import ru.demo.metrics.MetricsManager;
 import ru.demo.model.RequestForData;
 
-import java.net.URI;
-
-import static ru.demo.filter.MdcFilter.MDC_REQUEST_ID;
-import static ru.demo.metrics.Meter.REQUEST_COUNTER;
-
-
 @RestController
 public class ClientController {
     private static final Logger log = LoggerFactory.getLogger(ClientController.class);
@@ -29,23 +27,24 @@ public class ClientController {
     private final EurekaClient discoveryClient;
     private final CheckedFunction<RequestForData, String> getAdditionalInfoFunction;
 
-    //curl -v -H "X-Request-Id: 123" http://localhost:8081/info?name="testClient"
+    // curl -v -H "X-Request-Id: 123" http://localhost:8081/info?name="testClient"
 
-    public ClientController(MetricsManager metricsManager,
+    public ClientController(
+            MetricsManager metricsManager,
             ClientAdditionalInfoClient clientAdditionalInfoClient,
-                            EurekaClient discoveryClient,
-                            CircuitBreaker circuitBreaker,
-                            RateLimiter rateLimiter) {
+            EurekaClient discoveryClient,
+            CircuitBreaker circuitBreaker,
+            RateLimiter rateLimiter) {
         this.metricsManager = metricsManager;
         this.clientAdditionalInfoClient = clientAdditionalInfoClient;
         this.discoveryClient = discoveryClient;
 
-        this.getAdditionalInfoFunction = RateLimiter.decorateCheckedFunction(rateLimiter,
-                requestForData -> circuitBreaker.run(() -> doRequest(requestForData),
-                        t -> {
-                            log.error("delay call failed error:{}", t.getMessage());
-                            return "unknown info";
-                        }));
+        this.getAdditionalInfoFunction = RateLimiter.decorateCheckedFunction(
+                rateLimiter,
+                requestForData -> circuitBreaker.run(() -> doRequest(requestForData), t -> {
+                    log.error("delay call failed error:{}", t.getMessage());
+                    return "unknown info";
+                }));
     }
 
     @GetMapping(value = "/info")
@@ -80,9 +79,7 @@ public class ClientController {
             var clientInfo = discoveryClient.getNextServerFromEureka("SERVICE-CLIENT-INFO", false);
             log.info("clientInfo from Eureka:{}", clientInfo);
             var additionalInfo = clientAdditionalInfoClient.additionalInfo(
-                    MDC.get(MDC_REQUEST_ID),
-                    new URI(clientInfo.getHomePageUrl()),
-                    name);
+                    MDC.get(MDC_REQUEST_ID), new URI(clientInfo.getHomePageUrl()), name);
             log.info("additionalInfo:{}", additionalInfo);
             return additionalInfo.data();
         } catch (Exception ex) {

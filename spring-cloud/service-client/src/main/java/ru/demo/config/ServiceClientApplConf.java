@@ -16,23 +16,22 @@ import io.github.resilience4j.ratelimiter.RateLimiterConfig;
 import io.github.resilience4j.timelimiter.TimeLimiterConfig;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.observation.ObservationRegistry;
+import java.time.Duration;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JCircuitBreakerFactory;
 import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigBuilder;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.cloud.client.circuitbreaker.Customizer;
-import ru.demo.controller.ClientAdditionalInfoClient;
-import ru.demo.filter.MdcFilter;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.cloud.openfeign.FeignClientsConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.filter.OncePerRequestFilter;
+import ru.demo.controller.ClientAdditionalInfoClient;
+import ru.demo.filter.MdcFilter;
 import ru.demo.metrics.MetricsManager;
 import ru.demo.metrics.MicrometerMetricsManager;
-
-import java.time.Duration;
 
 @Configuration
 @Import(FeignClientsConfiguration.class)
@@ -41,9 +40,9 @@ public class ServiceClientApplConf {
     @Bean
     public RateLimiterConfig rateLimiterConfig() {
         return RateLimiterConfig.custom()
-                .timeoutDuration(Duration.ofMillis(100))
-                .limitRefreshPeriod(Duration.ofSeconds(1))
-                .limitForPeriod(1000)
+                .timeoutDuration(Duration.ofSeconds(3))
+                .limitRefreshPeriod(Duration.ofSeconds(10))
+                .limitForPeriod(5)
                 .build();
     }
 
@@ -55,13 +54,15 @@ public class ServiceClientApplConf {
     @Bean
     public Customizer<Resilience4JCircuitBreakerFactory> defaultCustomizer() {
         return factory -> factory.configureDefault(id -> new Resilience4JConfigBuilder(id)
-                .timeLimiterConfig(TimeLimiterConfig.custom().timeoutDuration(Duration.ofSeconds(5)).build())
+                .timeLimiterConfig(TimeLimiterConfig.custom()
+                        .timeoutDuration(Duration.ofMillis(200))
+                        .build())
                 .circuitBreakerConfig(CircuitBreakerConfig.ofDefaults())
                 .build());
     }
 
     @Bean
-    public CircuitBreaker circuitBreaker(CircuitBreakerFactory<?,?> circuitBreakerFactory) {
+    public CircuitBreaker circuitBreaker(CircuitBreakerFactory<?, ?> circuitBreakerFactory) {
         return circuitBreakerFactory.create("defaultCircuitBreaker");
     }
 
@@ -92,10 +93,10 @@ public class ServiceClientApplConf {
                 .decoder(new ResponseDecoder(decoder, mapper))
                 .contract(contract)
                 .logLevel(Logger.Level.FULL)
-                .addCapability(new MicrometerObservationCapability(observationRegistry))    // <-- THIS IS NEW
-                .addCapability(new MicrometerCapability(meterRegistry))                     // <-- THIS IS NEW
+                .addCapability(new MicrometerObservationCapability(observationRegistry)) // <-- THIS IS NEW
+                .addCapability(new MicrometerCapability(meterRegistry)) // <-- THIS IS NEW
                 .retryer(new Retryer.Default(500, 5_000, 10))
-                .target(ClientAdditionalInfoClient.class,"http");
+                .target(ClientAdditionalInfoClient.class, "http");
     }
 
     @Bean

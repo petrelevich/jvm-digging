@@ -4,12 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.FeignException;
 import feign.Response;
 import feign.codec.Decoder;
-import ru.demo.model.ClientData;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.lang.reflect.Type;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.demo.model.ClientData;
 
 public class ResponseDecoder implements Decoder {
     private static final Logger log = LoggerFactory.getLogger(ResponseDecoder.class);

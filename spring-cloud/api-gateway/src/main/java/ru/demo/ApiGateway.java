@@ -9,11 +9,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ApiGateway {
     private static final Logger log = LoggerFactory.getLogger(ApiGateway.class);
 
-/*
-    curl -v http://localhost:7777/client/info?name=testClientName
-    curl -v http://localhost:7777/order/info?id=testOrderId
+    /*
+       curl -v http://localhost:7777/client/info?name=testClientName
+       curl -v http://localhost:7777/order/info?id=testOrderId
 
- */
+    */
 
     public static void main(String[] args) {
         SpringApplication.run(ApiGateway.class, args);
