@@ -25,3 +25,4 @@ include("service-client-info")
 include("service-order")
 
 include("kafka-log-appender")
+include("resilience4j")

@@ -23,6 +23,7 @@ allprojects {
 
     val springCloudVersion: String by project
     val logbackEncoder: String by project
+    val resilience4jVersion: String by project
 
     apply(plugin = "io.spring.dependency-management")
     dependencyManagement {
@@ -32,6 +33,8 @@ allprojects {
                 mavenBom("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion")
             }
             dependency("net.logstash.logback:logstash-logback-encoder:$logbackEncoder")
+
+            dependency("io.github.resilience4j:resilience4j-circuitbreaker:$resilience4jVersion")
         }
     }
 
