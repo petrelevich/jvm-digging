@@ -8,6 +8,8 @@ include("data-multiplier")
 include("cpu-bound")
 include("cpu-bound-mvc")
 
+include("backpressure")
+
 
 pluginManagement {
     val jgitver: String by settings
