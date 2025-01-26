@@ -1,14 +1,12 @@
-package ru.demo.manytomany;
+package ru.demo.onetomany;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 import reactor.core.scheduler.Schedulers;
-import ru.demo.manytomany.generator.Subscriber;
-import ru.demo.manytomany.generator.Value;
-import ru.demo.manytomany.generator.ValueGenerator;
+import ru.demo.generator.Subscriber;
+import ru.demo.generator.Value;
+import ru.demo.generator.ValueGenerator;
 
 import java.time.Duration;
 
@@ -19,13 +17,13 @@ import java.time.Duration;
 -XX:+UseG1GC
 */
 
-public class SinkDemo {
-    private static final Logger log = LoggerFactory.getLogger(SinkDemo.class);
+public class OneSinkDemo {
+    private static final Logger log = LoggerFactory.getLogger(OneSinkDemo.class);
 
     public static void main(String[] args) {
 
         System.setProperty("reactor.bufferSize.small", "10");
-        new SinkDemo().start();
+        new OneSinkDemo().start();
     }
 
     private void start() {
@@ -46,6 +44,11 @@ public class SinkDemo {
                 log.info("complete");
                 sink.tryEmitComplete();
             }
+
+            @Override
+            public String getName() {
+                return "generator";
+            }
         }, 0, end);
 
         sink.asFlux()
@@ -65,7 +68,7 @@ public class SinkDemo {
 
         sleep(1);
         sink.asFlux()
-                .publishOn(Schedulers.newSingle("sub-3"))
+                .publishOn(Schedulers.newSingle("sub-3"), 8)
                 .doOnNext(val -> {
                     log.info("sub-3 value:{}", val);
                     sleep(2);
