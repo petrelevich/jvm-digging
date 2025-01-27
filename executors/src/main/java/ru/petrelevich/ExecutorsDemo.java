@@ -52,6 +52,8 @@ public class ExecutorsDemo {
 
         try (var executor = Executors.newFixedThreadPool(3, makeThreadFactory())) {
             executor.submit(() -> processItemFromQueue(queue));
+            executor.submit(() -> processItemFromQueue(queue));
+            executor.submit(() -> processItemFromQueue(queue));
         }
     }
 
