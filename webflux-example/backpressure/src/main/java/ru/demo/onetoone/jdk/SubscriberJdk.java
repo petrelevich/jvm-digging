@@ -1,4 +1,4 @@
-package ru.demo.jdk;
+package ru.demo.onetoone.jdk;
 
 import org.jctools.queues.SpscArrayQueue;
 import org.slf4j.Logger;
@@ -10,7 +10,6 @@ import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class SubscriberJdk {
     private static final Logger log = LoggerFactory.getLogger(SubscriberJdk.class);

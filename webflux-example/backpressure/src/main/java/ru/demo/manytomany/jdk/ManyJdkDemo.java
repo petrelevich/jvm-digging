@@ -12,7 +12,6 @@ import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -28,14 +27,12 @@ public class ManyJdkDemo {
     }
 
     private void start() {
-        Queue<Value> queue = new MpscArrayQueue<>(100);
         Publisher publisher = new PublisherJdk();
+        Queue<Value> queue = new MpscArrayQueue<>(100);
 
         makeValueGenerator(queue, 1);
         makeValueGenerator(queue, 2);
         makeValueGenerator(queue, 3);
-
-        makeSinkTransfer(queue, publisher, 3);
 
         var subscriber1 = makeSubscriber("sub-1", 0);
         publisher.subscribe(subscriber1);
@@ -46,6 +43,7 @@ public class ManyJdkDemo {
         var subscriber3 = makeSubscriber("sub-3", 4);
         publisher.subscribe(subscriber3);
 
+        makeSinkTransfer(queue, publisher, 3);
     }
 
     private void makeSinkTransfer(Queue<Value> queue, Publisher publisher, int generatorCounter) {

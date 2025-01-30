@@ -12,6 +12,9 @@ import ru.demo.generator.ValueGenerator;
 import java.time.Duration;
 import java.util.Queue;
 
+import static ru.demo.generator.Value.COMPLETE_VALUE;
+
+
 public class ManySinkDemo {
     private static final Logger log = LoggerFactory.getLogger(ManySinkDemo.class);
 
@@ -25,44 +28,60 @@ public class ManySinkDemo {
         Sinks.Many<Value> sink = Sinks.many().multicast().directBestEffort();
 
         Queue<Value> queue = new MpscArrayQueue<>(100);
-        makeSinkTransfer(queue, sink);
 
         makeValueGenerator(queue, 1);
         makeValueGenerator(queue, 2);
         makeValueGenerator(queue, 3);
 
+        var schedulerSub1 = Schedulers.newSingle("sub-1");
         sink.asFlux()
-                .publishOn(Schedulers.newSingle("sub-1"))
+                .publishOn(schedulerSub1)
                 .doOnNext(val -> log.info("sub-1 value:{}", val))
+                .doOnComplete(schedulerSub1::dispose)
                 .subscribe();
 
         sleep(1);
-
+        var schedulerSub2 = Schedulers.newSingle("sub-2");
         sink.asFlux()
-                .publishOn(Schedulers.newSingle("sub-2"))
+                .publishOn(schedulerSub2)
                 .doOnNext(val -> {
                     log.info("sub-2 value:{}", val);
                     sleep(1);
                 })
+                .doOnComplete(schedulerSub2::dispose)
                 .subscribe();
 
         sleep(1);
+        var schedulerSub3 = Schedulers.newSingle("sub-3");
         sink.asFlux()
-                .publishOn(Schedulers.newSingle("sub-3"))
+                .publishOn(schedulerSub3)
                 .doOnNext(val -> {
                     log.info("sub-3 value:{}", val);
                     sleep(2);
                 })
+                .doOnComplete(schedulerSub3::dispose)
                 .subscribe();
+
+        makeSinkTransfer(queue, sink, 3);
     }
 
-    private void makeSinkTransfer(Queue<Value> queue, Sinks.Many<Value> sink) {
+    private void makeSinkTransfer(Queue<Value> queue, Sinks.Many<Value> sink, int generatorCounter) {
         Thread.ofPlatform().name("transfer").start(() -> {
+            int completeCounter = 0;
             while (!Thread.currentThread().isInterrupted()) {
                 var value = queue.poll();
                 if (value != null) {
-                    var emitResult = sink.tryEmitNext(value);
-                    log.info("transfer value:{}, emitResult:{}", value, emitResult);
+                    if (COMPLETE_VALUE.equals(value)) {
+                        completeCounter++;
+                        if (completeCounter == generatorCounter) {
+                            sink.tryEmitComplete();
+                            log.info("transfer value completed");
+                            return;
+                        }
+                    } else {
+                        var emitResult = sink.tryEmitNext(value);
+                        log.info("transfer value:{}, emitResult:{}", value, emitResult);
+                    }
                 }
             }
         });
@@ -81,6 +100,10 @@ public class ManySinkDemo {
             @Override
             public void onComplete() {
                 log.info("complete_{}", idx);
+                boolean offerResult;
+                do
+                    offerResult = queue.offer(COMPLETE_VALUE);
+                while (!offerResult);
             }
 
             @Override

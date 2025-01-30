@@ -1,4 +1,4 @@
-package ru.demo.reactor;
+package ru.demo.onetoone;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +18,10 @@ public class ReactorOneToOnePrefetch {
     }
 
     private void start() {
-        var generatorTimer = generatorTimer();
+        var generatorTimer = Schedulers.newSingle("generator-thread");
         var publisher = publisher(generatorTimer);
 
-        var subscriberTimer = subscriberTimer();
+        var subscriberTimer = Schedulers.newSingle("subscriber-thread");
         subscriber(subscriberTimer, publisher);
 
         log.info("end");
@@ -39,22 +39,12 @@ public class ReactorOneToOnePrefetch {
     }
 
     private void subscriber(Scheduler timer, Flux<StringValue> publisher) {
-        publisher
-                .concatMap(val -> {
+        publisher.concatMap(val -> {
                     log.info("just, val:{}", val);
                     return Mono.just(val);
                 }, 10)
                 .delayElements(Duration.ofSeconds(3), timer)
                 .doOnNext(val -> log.info("---------------------sub val:{}", val))
                 .subscribe();
-    }
-
-
-    private Scheduler generatorTimer() {
-        return Schedulers.newSingle("generator-thread");
-    }
-
-    private Scheduler subscriberTimer() {
-        return Schedulers.newSingle("subscriber-thread");
     }
 }

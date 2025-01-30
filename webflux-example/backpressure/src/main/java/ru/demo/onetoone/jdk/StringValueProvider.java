@@ -1,10 +1,8 @@
-package ru.demo.jdk;
+package ru.demo.onetoone.jdk;
 
 
 public interface StringValueProvider {
     void request(int n);
 
     void consume(StringValueConsumer consumer);
-
-    void subscribe();
 }

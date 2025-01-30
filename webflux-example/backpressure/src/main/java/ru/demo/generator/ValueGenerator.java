@@ -27,11 +27,11 @@ public class ValueGenerator {
 
 
     private Value generate(int val) {
-        try {
-            Thread.sleep(Duration.ofSeconds(3).toMillis());
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+//        try {
+//            Thread.sleep(Duration.ofSeconds(3).toMillis());
+//        } catch (InterruptedException e) {
+//            Thread.currentThread().interrupt();
+//        }
         return new Value(val);
     }
 }

@@ -1,4 +1,4 @@
-package ru.demo.jdk;
+package ru.demo.onetoone.jdk;
 
 import ru.demo.StringValue;
 

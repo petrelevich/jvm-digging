@@ -10,12 +10,6 @@ import ru.demo.generator.ValueGenerator;
 
 import java.time.Duration;
 
-/*
--Xms128m
--Xmx128m
--verbose:gc
--XX:+UseG1GC
-*/
 
 public class OneSinkDemo {
     private static final Logger log = LoggerFactory.getLogger(OneSinkDemo.class);
@@ -27,9 +21,8 @@ public class OneSinkDemo {
     }
 
     private void start() {
-        //Sinks.Many<Value> sink = Sinks.many().multicast().onBackpressureBuffer(8);
-        Sinks.Many<Value> sink = Sinks.many().multicast().directBestEffort();
-
+        Sinks.Many<Value> sink = Sinks.many().multicast().onBackpressureBuffer(8);
+        //Sinks.Many<Value> sink = Sinks.many().multicast().directBestEffort();
 
         var end = 5000;
         var generator = new ValueGenerator(new Subscriber() {
@@ -57,7 +50,6 @@ public class OneSinkDemo {
                 .subscribe();
 
         sleep(1);
-
         sink.asFlux()
                 .publishOn(Schedulers.newSingle("sub-2"))
                 .doOnNext(val -> {
@@ -68,7 +60,7 @@ public class OneSinkDemo {
 
         sleep(1);
         sink.asFlux()
-                .publishOn(Schedulers.newSingle("sub-3"), 8)
+                .publishOn(Schedulers.newSingle("sub-3"), 16)
                 .doOnNext(val -> {
                     log.info("sub-3 value:{}", val);
                     sleep(2);

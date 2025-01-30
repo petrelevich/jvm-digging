@@ -31,6 +31,7 @@ allprojects {
     }
 
     val propagation: String by project
+    val jctools: String by project
 
     apply(plugin = "io.spring.dependency-management")
     dependencyManagement {
@@ -39,6 +40,7 @@ allprojects {
                 mavenBom(BOM_COORDINATES)
             }
             dependency("io.micrometer:context-propagation:$propagation")
+            dependency("org.jctools:jctools-core:$jctools")
         }
     }
 

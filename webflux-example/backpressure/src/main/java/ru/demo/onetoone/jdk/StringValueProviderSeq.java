@@ -1,4 +1,4 @@
-package ru.demo.jdk;
+package ru.demo.onetoone.jdk;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,10 +35,5 @@ public class StringValueProviderSeq implements StringValueProvider {
     @Override
     public void consume(StringValueConsumer consumer) {
         this.consumer = consumer;
-    }
-
-    @Override
-    public void subscribe() {
-        request(1);
     }
 }
