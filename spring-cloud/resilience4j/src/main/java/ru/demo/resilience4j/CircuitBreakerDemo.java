@@ -2,6 +2,7 @@ package ru.demo.resilience4j;
 
 import static io.github.resilience4j.circuitbreaker.CircuitBreaker.State.HALF_OPEN;
 import static io.github.resilience4j.circuitbreaker.CircuitBreaker.State.OPEN;
+import static io.github.resilience4j.circuitbreaker.CircuitBreakerConfig.SlidingWindowType.COUNT_BASED;
 
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
@@ -30,6 +31,7 @@ public class CircuitBreakerDemo {
                 .waitDurationInOpenState(Duration.ofSeconds(6))
                 .permittedNumberOfCallsInHalfOpenState(3)
                 .slidingWindowSize(10)
+                .slidingWindowType(COUNT_BASED)
                 .build();
 
         var circuitBreakerRegistry = CircuitBreakerRegistry.of(circuitBreakerConfig);
@@ -40,7 +42,7 @@ public class CircuitBreakerDemo {
                 .onFailureRateExceeded(
                         event -> log.info("EventType:{}, FailureRate:{}", event.getEventType(), event.getFailureRate()))
                 .onError(event -> log.info(
-                        "EventType:{}, error:{}",
+                        "EventType:{}, errorMsg:{}",
                         event.getEventType(),
                         event.getThrowable().getMessage()))
                 .onCallNotPermitted(event -> log.info("EventType:{}", event.getEventType()))
@@ -61,13 +63,13 @@ public class CircuitBreakerDemo {
         var decoratedSupplierOk = CircuitBreaker.decorateSupplier(circuitBreaker, this::action);
         var decoratedSupplierException = CircuitBreaker.decorateSupplier(circuitBreaker, this::actionException);
 
-        // IntStream.range(1, 10).forEach(val -> decoratedSupplierOk.get());
+        // IntStream.range(0, 10).forEach(val -> decoratedSupplierOk.get());
 
         runException(decoratedSupplierOk, decoratedSupplierException);
     }
 
     private void runException(Supplier<String> decoratedSupplierOk, Supplier<String> decoratedSupplierException) {
-        IntStream.range(1, 100).forEach(val -> {
+        IntStream.range(0, 100).forEach(val -> {
             try {
                 log.info("attemptNo:{}", attemptNo++);
                 sleep(3);
