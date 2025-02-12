@@ -40,9 +40,9 @@ public class ServiceClientApplConf {
     @Bean
     public RateLimiterConfig rateLimiterConfig() {
         return RateLimiterConfig.custom()
-                .timeoutDuration(Duration.ofSeconds(3))
+                .timeoutDuration(Duration.ofSeconds(10))
                 .limitRefreshPeriod(Duration.ofSeconds(10))
-                .limitForPeriod(5)
+                .limitForPeriod(2)
                 .build();
     }
 
@@ -55,7 +55,7 @@ public class ServiceClientApplConf {
     public Customizer<Resilience4JCircuitBreakerFactory> defaultCustomizer() {
         return factory -> factory.configureDefault(id -> new Resilience4JConfigBuilder(id)
                 .timeLimiterConfig(TimeLimiterConfig.custom()
-                        .timeoutDuration(Duration.ofMillis(200))
+                        .timeoutDuration(Duration.ofMillis(10))
                         .build())
                 .circuitBreakerConfig(CircuitBreakerConfig.ofDefaults())
                 .build());

@@ -35,6 +35,7 @@ allprojects {
             dependency("net.logstash.logback:logstash-logback-encoder:$logbackEncoder")
 
             dependency("io.github.resilience4j:resilience4j-circuitbreaker:$resilience4jVersion")
+            dependency("io.github.resilience4j:resilience4j-bulkhead:$resilience4jVersion")
         }
     }
 
