@@ -3,6 +3,7 @@ package ru.demo.onetoone.jdk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class OneToOnePrefetch {
@@ -16,7 +17,8 @@ public class OneToOnePrefetch {
         var publisherExecutor = Executors.newSingleThreadExecutor(r -> Thread.ofPlatform().name("generator-thread").unstarted(r));
         var publisher = new StringValueProviderSeq(1, 500, publisherExecutor);
 
-        var subscriber = new SubscriberJdk(10, publisher);
+        var subscriberExecutor = Executors.newSingleThreadExecutor(r -> Thread.ofPlatform().name("subscriber-thread").unstarted(r));
+        var subscriber = new SubscriberJdk(subscriberExecutor,10, publisher);
         subscriber.subscribe();
 
         log.info("end");

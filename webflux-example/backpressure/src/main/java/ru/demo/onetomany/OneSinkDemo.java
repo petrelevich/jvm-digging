@@ -21,8 +21,8 @@ public class OneSinkDemo {
     }
 
     private void start() {
+        // Sinks.Many<Value> sink = Sinks.many().multicast().directBestEffort();
         Sinks.Many<Value> sink = Sinks.many().multicast().onBackpressureBuffer(8);
-        //Sinks.Many<Value> sink = Sinks.many().multicast().directBestEffort();
 
         var end = 5000;
         var generator = new ValueGenerator(new Subscriber() {

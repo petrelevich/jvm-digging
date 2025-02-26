@@ -8,18 +8,18 @@ import ru.demo.StringValue;
 import java.time.Duration;
 import java.util.Queue;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SubscriberJdk {
     private static final Logger log = LoggerFactory.getLogger(SubscriberJdk.class);
     private final int prefetch;
     private final Queue<StringValue> queue;
-    private final ExecutorService executor = Executors.newSingleThreadExecutor(r -> Thread.ofPlatform().name("subscriber-thread").unstarted(r));
+    private final ExecutorService executor;
     private final StringValueProvider publisher;
     private final AtomicInteger onTheFly = new AtomicInteger(0);
 
-    public SubscriberJdk(int prefetch, StringValueProvider publisher) {
+    public SubscriberJdk(ExecutorService executor, int prefetch, StringValueProvider publisher) {
+        this.executor = executor;
         this.prefetch = prefetch;
         this.queue = new SpscArrayQueue<>(prefetch);
         this.publisher = publisher;
