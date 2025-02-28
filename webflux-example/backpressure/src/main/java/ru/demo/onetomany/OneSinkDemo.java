@@ -21,8 +21,8 @@ public class OneSinkDemo {
     }
 
     private void start() {
-        // Sinks.Many<Value> sink = Sinks.many().multicast().directBestEffort();
-        Sinks.Many<Value> sink = Sinks.many().multicast().onBackpressureBuffer(8);
+         Sinks.Many<Value> sink = Sinks.many().multicast().directBestEffort();
+        //Sinks.Many<Value> sink = Sinks.many().multicast().onBackpressureBuffer(8);
 
         var end = 5000;
         var generator = new ValueGenerator(new Subscriber() {
@@ -54,7 +54,7 @@ public class OneSinkDemo {
                 .publishOn(Schedulers.newSingle("sub-2"))
                 .doOnNext(val -> {
                     log.info("sub-2 value:{}", val);
-                    sleep(1);
+                    sleep(3);
                 })
                 .subscribe();
 
@@ -63,7 +63,7 @@ public class OneSinkDemo {
                 .publishOn(Schedulers.newSingle("sub-3"), 16)
                 .doOnNext(val -> {
                     log.info("sub-3 value:{}", val);
-                    sleep(2);
+                    sleep(4);
                 })
                 .subscribe();
 
