@@ -24,6 +24,8 @@ allprojects {
     val springCloudVersion: String by project
     val logbackEncoder: String by project
     val resilience4jVersion: String by project
+    val bucket4j: String by project
+    val redisson: String by project
 
     apply(plugin = "io.spring.dependency-management")
     dependencyManagement {
@@ -34,6 +36,10 @@ allprojects {
                 mavenBom("io.github.resilience4j:resilience4j-bom:$resilience4jVersion")
             }
             dependency("net.logstash.logback:logstash-logback-encoder:$logbackEncoder")
+            dependency("com.bucket4j:bucket4j_jdk17-core:$bucket4j")
+            dependency("com.bucket4j:bucket4j_jdk17-redis-common:$bucket4j")
+            dependency("com.bucket4j:bucket4j_jdk17-redisson:$bucket4j")
+            dependency("org.redisson:redisson:$redisson")
         }
     }
 

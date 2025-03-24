@@ -26,3 +26,5 @@ include("service-order")
 
 include("kafka-log-appender")
 include("resilience4j")
+include("bucket4j")
+include("bucket4j-redis")
