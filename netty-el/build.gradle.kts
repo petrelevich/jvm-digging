@@ -17,6 +17,7 @@ allprojects {
 
     val springBootBom: String by project
     val spotbugs: String by project
+    val jctools: String by project
 
     apply(plugin = "io.spring.dependency-management")
     dependencyManagement {
@@ -25,6 +26,7 @@ allprojects {
                 mavenBom("org.springframework.boot:spring-boot-dependencies:$springBootBom")
             }
             dependency ("com.github.spotbugs:spotbugs-annotations:$spotbugs")
+            dependency ("org.jctools:jctools-core:$jctools")
         }
     }
 

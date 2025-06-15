@@ -7,6 +7,8 @@ import ru.demo.server.ClientRequestHandle;
 import ru.demo.server.ClientRequestHandleFactory;
 import ru.demo.server.EventLoop;
 import ru.demo.server.NetworkException;
+import ru.demo.server.queue.TaskQueueConsumerProducer;
+import ru.demo.server.queue.TaskQueueJc;
 
 import java.io.IOException;
 import java.nio.channels.SelectionKey;
@@ -19,12 +21,16 @@ import static java.nio.channels.SelectionKey.OP_READ;
 
 public class SingleThreadEventLoop implements EventLoop {
     private static final Logger log = LoggerFactory.getLogger(SingleThreadEventLoop.class);
+    private static final long START_TIME = System.nanoTime();
 
     private final Selector selector;
     private Thread thread;
     private final ClientConnectionHandler clientConnectionHandler;
     private final ClientRequestHandleFactory clientRequestHandleFactory;
     private final String name;
+    private static final int IO_RATIO = 50;
+
+    private final TaskQueueConsumerProducer taskQueueConsumerProducer;
 
     public SingleThreadEventLoop(String name,
                                  ClientRequestHandleFactory clientRequestHandleFactory,
@@ -33,7 +39,8 @@ public class SingleThreadEventLoop implements EventLoop {
         this.clientConnectionHandler = clientConnectionHandler;
         this.clientRequestHandleFactory = clientRequestHandleFactory;
         this.name = name;
-        selector = Selector.open();
+        this.selector = Selector.open();
+        this.taskQueueConsumerProducer = new TaskQueueJc();
     }
 
     @Override
@@ -50,22 +57,28 @@ public class SingleThreadEventLoop implements EventLoop {
 
     @Override
     public void registerClient(SocketChannel clientSocketChannel) {
-        try {
-            var selectionKey = clientSocketChannel.register(selector, OP_READ);
-            var clientRequestHandle = clientRequestHandleFactory.newClientRequestHandle();
-            selectionKey.attach(clientRequestHandle);
-        } catch (Exception ex) {
-            log.error("client register error", ex);
-        }
+        taskQueueConsumerProducer.offerTask(() -> {
+            try {
+                var selectionKey = clientSocketChannel.register(selector, OP_READ);
+                var clientRequestHandle = clientRequestHandleFactory.newClientRequestHandle();
+                selectionKey.attach(clientRequestHandle);
+                log.info("registerClient done, key:{}", selectionKey);
+            } catch (Exception ex) {
+                log.error("client register error", ex);
+            }
+        });
     }
 
     @Override
     public void registerServer(ServerSocketChannel serverSocketChannel) {
-        try {
-            serverSocketChannel.register(selector, OP_ACCEPT);
-        } catch (Exception ex) {
-            log.error("server register error", ex);
-        }
+        taskQueueConsumerProducer.offerTask(() -> {
+            try {
+                var key = serverSocketChannel.register(selector, OP_ACCEPT);
+                log.info("registerServer done, key:{}", key.channel());
+            } catch (Exception ex) {
+                log.error("server register error", ex);
+            }
+        });
     }
 
     @Override
@@ -105,9 +118,9 @@ public class SingleThreadEventLoop implements EventLoop {
         if (clientRequestHandleObj == null) {
             throw new IllegalStateException("clientRequestHandle is null");
         }
-        if (clientRequestHandleObj instanceof  ClientRequestHandle clientRequestHandle) {
+        if (clientRequestHandleObj instanceof ClientRequestHandle clientRequestHandle) {
             try {
-                clientRequestHandle.handle(socketChannel);
+                clientRequestHandle.handle(taskQueueConsumerProducer, socketChannel);
             } catch (Exception ex) {
                 if (ex instanceof IOException && "Broken pipe".equals(ex.getMessage())) {
                     log.error("Client disconnected");
@@ -125,7 +138,10 @@ public class SingleThreadEventLoop implements EventLoop {
         try {
             log.info("thread started, name:{}", name);
             while (!Thread.currentThread().isInterrupted()) {
+                var ioStartTime = System.nanoTime();
                 selectNow();
+                var ioTime = System.nanoTime() - ioStartTime;
+                runAllTasks(ioTime * (100 - IO_RATIO) / IO_RATIO);
             }
         } catch (Exception e) {
             log.error("thread run error", e);
@@ -139,12 +155,53 @@ public class SingleThreadEventLoop implements EventLoop {
         log.info("thread stopped, name:{}", name);
     }
 
+    private void runAllTasks(long timeoutNanos) {
+        var task = taskQueueConsumerProducer.pollTask();
+        if (task == null) {
+            return;
+        }
+
+        long deadline = timeoutNanos > 0 ? getCurrentTimeNanos() + timeoutNanos : 0;
+        long runTasks = 0;
+        long lastExecutionTime;
+        while (!Thread.currentThread().isInterrupted()) {
+            safeExecute(task);
+
+            runTasks++;
+
+            // Check timeout every 64 tasks because nanoTime() is relatively expensive.
+            // XXX: Hard-coded value - will make it configurable if it is really a problem.
+            if ((runTasks & 0x3F) == 0) {
+                lastExecutionTime = getCurrentTimeNanos();
+                if (lastExecutionTime >= deadline) {
+                    return;
+                }
+            }
+
+            task = taskQueueConsumerProducer.pollTask();
+            if (task == null) {
+                return;
+            }
+        }
+    }
+
+    private long getCurrentTimeNanos() {
+        return System.nanoTime() - START_TIME;
+    }
+
+    private static void safeExecute(Runnable task) {
+        try {
+            task.run();
+        } catch (Exception t) {
+            log.warn("A task raised an exception. Task: {}", task, t);
+        }
+    }
+
     private void selectNow() {
         try {
             selector.selectNow(this::performIO);
         } catch (Exception ex) {
             log.error("error:", ex);
         }
-
     }
 }

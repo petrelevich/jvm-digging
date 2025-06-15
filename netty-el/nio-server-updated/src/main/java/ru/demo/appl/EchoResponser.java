@@ -3,6 +3,8 @@ package ru.demo.appl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.demo.server.ClientRequestHandle;
+import ru.demo.server.NetworkException;
+import ru.demo.server.queue.TaskQueueProducer;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -12,19 +14,33 @@ import java.nio.charset.StandardCharsets;
 public class EchoResponser implements ClientRequestHandle {
     private static final Logger log = LoggerFactory.getLogger(EchoResponser.class);
 
-
     public EchoResponser() {
         log.info("new EchoResponser");
     }
 
     @Override
-    public void handle(SocketChannel clientSocketChannel) throws IOException {
+    public void handle(TaskQueueProducer taskQueueProducer, SocketChannel clientSocketChannel) throws IOException {
         var requestFromClient = handleRequestInternal(clientSocketChannel);
+        log.info("handle. requestFromClient:{}", requestFromClient);
         if (requestFromClient != null) {
-            var responseForClient = processClientRequest(requestFromClient);
-            sendResponse(clientSocketChannel, responseForClient);
+            taskQueueProducer.offerTask(() -> {
+                try {
+                    var responseForClient = processClientRequest(requestFromClient);
+                    sendResponse(clientSocketChannel, responseForClient);
+                } catch (IOException ex) {
+                    closeChannel(clientSocketChannel);
+                }
+            });
         } else {
+            closeChannel(clientSocketChannel);
+        }
+    }
+
+    private void closeChannel(SocketChannel clientSocketChannel) {
+        try {
             clientSocketChannel.close();
+        } catch (Exception ex) {
+            throw new NetworkException(ex);
         }
     }
 

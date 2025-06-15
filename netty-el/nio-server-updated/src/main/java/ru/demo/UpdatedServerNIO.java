@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.demo.appl.EchoResponser;
 import ru.demo.server.NioEventLoopGroup;
+import ru.demo.server.queue.TaskQueueJc;
 
 public class UpdatedServerNIO {
     private static final Logger log = LoggerFactory.getLogger(UpdatedServerNIO.class);
@@ -26,7 +27,6 @@ public class UpdatedServerNIO {
         serverSocketChannel = ServerSocketChannel.open();
         serverSocketChannel.configureBlocking(false);
         serverSocketChannel.socket().bind(new InetSocketAddress(PORT));
-
         eventLoopGroup = new NioEventLoopGroup(N_THREADS, serverSocketChannel, EchoResponser::new);
 
         var shutdownHook = new Thread(() -> {
