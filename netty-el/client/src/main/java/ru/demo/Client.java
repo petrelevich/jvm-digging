@@ -13,7 +13,7 @@ public class Client {
 
     private static final int PORT = 8080;
     private static final String HOST = "localhost";
-    private static final int CLIENTS_NUMBER = 1;
+    private static final int CLIENTS_NUMBER = 4;
 
     public static void main(String[] args) {
         var counter = new AtomicInteger(0);

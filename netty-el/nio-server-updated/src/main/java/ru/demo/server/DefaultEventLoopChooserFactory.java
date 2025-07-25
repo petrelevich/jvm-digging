@@ -3,6 +3,7 @@ package ru.demo.server;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+@SuppressWarnings("java:S6548") //перенес из netty "как есть"
 public class DefaultEventLoopChooserFactory {
 
     public static final DefaultEventLoopChooserFactory INSTANCE = new DefaultEventLoopChooserFactory();

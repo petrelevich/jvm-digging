@@ -24,16 +24,6 @@ public class NioEventLoopGroup {
         next().registerServer(serverSocketChannel);
     }
 
-    private EventLoop newChild(ClientRequestHandleFactory clientRequestHandleFactory, String name) throws IOException {
-        return new SingleThreadEventLoop(name, clientRequestHandleFactory,
-                clientSocketChannel -> next().registerClient(clientSocketChannel));
-    }
-
-
-    private EventLoop next() {
-        return chooser.next();
-    }
-
     public void stop() {
         for(var eventLoop: children) {
             try {
@@ -42,5 +32,14 @@ public class NioEventLoopGroup {
                 log.error("eventLoop:{} stop error", eventLoop.getName(), ex);
             }
         }
+    }
+
+    private EventLoop newChild(ClientRequestHandleFactory clientRequestHandleFactory, String name) throws IOException {
+        return new SingleThreadEventLoop(name, clientRequestHandleFactory,
+                clientSocketChannel -> next().registerClient(clientSocketChannel));
+    }
+
+    private EventLoop next() {
+        return chooser.next();
     }
 }

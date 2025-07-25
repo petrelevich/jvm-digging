@@ -2,13 +2,12 @@ package ru.demo.server;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.demo.SingleThreadEventLoop;
-
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 
 public class SystemPropertyUtil {
-    private static final Logger log = LoggerFactory.getLogger(SingleThreadEventLoop.class);
+    private static final Logger log = LoggerFactory.getLogger(SystemPropertyUtil.class);
+
+    private SystemPropertyUtil() {
+    }
 
     /**
      * Returns the value of the Java system property with the specified
@@ -46,19 +45,6 @@ public class SystemPropertyUtil {
         return value;
     }
 
-    public static String checkNonEmpty(final String value, final String name) {
-        if (checkNotNull(value, name).isEmpty()) {
-            throw new IllegalArgumentException("Param '" + name + "' must not be empty");
-        }
-        return value;
-    }
-
-    public static <T> T checkNotNull(T arg, String text) {
-        if (arg == null) {
-            throw new NullPointerException(text);
-        }
-        return arg;
-    }
 
     public static int getInt(String key, int def) {
         String value = get(key);
@@ -79,5 +65,18 @@ public class SystemPropertyUtil {
         );
 
         return def;
+    }
+
+    private static void checkNonEmpty(String value, String name) {
+        if (checkNotNull(value, name).isEmpty()) {
+            throw new IllegalArgumentException("Param '" + name + "' must not be empty");
+        }
+    }
+
+    private static <T> T checkNotNull(T arg, String text) {
+        if (arg == null) {
+            throw new NullPointerException(text);
+        }
+        return arg;
     }
 }

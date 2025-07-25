@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.demo.appl.EchoResponser;
 import ru.demo.server.NioEventLoopGroup;
-import ru.demo.server.queue.TaskQueueJc;
 
 public class UpdatedServerNIO {
     private static final Logger log = LoggerFactory.getLogger(UpdatedServerNIO.class);
