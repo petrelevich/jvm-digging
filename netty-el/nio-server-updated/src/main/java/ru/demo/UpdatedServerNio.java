@@ -9,19 +9,19 @@ import org.slf4j.LoggerFactory;
 import ru.demo.appl.EchoResponser;
 import ru.demo.server.NioEventLoopGroup;
 
-public class UpdatedServerNIO {
-    private static final Logger log = LoggerFactory.getLogger(UpdatedServerNIO.class);
+public class UpdatedServerNio {
+    private static final Logger log = LoggerFactory.getLogger(UpdatedServerNio.class);
 
     private static final int PORT = 8080;
-    private static final int N_THREADS = 2;
+    private static final int N_THREADS = 10;
     private final ServerSocketChannel serverSocketChannel;
     private final NioEventLoopGroup eventLoopGroup;
 
     public static void main(String[] args) throws IOException {
-        new UpdatedServerNIO();
+        new UpdatedServerNio();
     }
 
-    public UpdatedServerNIO() throws IOException {
+    public UpdatedServerNio() throws IOException {
         log.info("starting, nThreads:{}, port:{}", N_THREADS, PORT);
         serverSocketChannel = ServerSocketChannel.open();
         serverSocketChannel.configureBlocking(false);

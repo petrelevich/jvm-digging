@@ -15,13 +15,13 @@ import org.slf4j.LoggerFactory;
 import static java.nio.channels.SelectionKey.OP_ACCEPT;
 import static java.nio.channels.SelectionKey.OP_READ;
 
-public class ServerNIO {
-    private static final Logger logger = LoggerFactory.getLogger(ServerNIO.class);
+public class ServerNio {
+    private static final Logger logger = LoggerFactory.getLogger(ServerNio.class);
 
     private static final int PORT = 8080;
 
     public static void main(String[] args) throws IOException {
-        new ServerNIO().go();
+        new ServerNio().go();
     }
 
     private void go() throws IOException {
