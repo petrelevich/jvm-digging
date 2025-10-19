@@ -8,10 +8,11 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings({"java:S6906", "java:S1118"})
 public class JumpThreadSynchronized {
     private static final Logger log = LoggerFactory.getLogger(JumpThreadSynchronized.class);
 
-    public static void main(String[] args) throws InterruptedException {
+    static void main() throws InterruptedException {
         Thread.ofVirtual().start(() -> {
             while (!Thread.currentThread().isInterrupted()) {
                 sleep(1);

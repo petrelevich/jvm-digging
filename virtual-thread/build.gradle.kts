@@ -3,22 +3,11 @@ import org.gradle.plugins.ide.idea.model.IdeaLanguageLevel
 import org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
 
 plugins {
-    idea
     id("fr.brouillard.oss.gradle.jgitver")
     id("io.spring.dependency-management")
     id("org.springframework.boot") apply false
     id("name.remal.sonarlint") apply false
     id("com.diffplug.spotless") apply false
-}
-
-idea {
-    project {
-        languageLevel = IdeaLanguageLevel(21)
-    }
-    module {
-        isDownloadJavadoc = true
-        isDownloadSources = true
-    }
 }
 
 allprojects {
@@ -30,6 +19,9 @@ allprojects {
     }
 
     val propagation: String by project
+    val commonsIo: String by project
+    val palantir: String by project
+    val guava: String by project
 
     apply(plugin = "io.spring.dependency-management")
     dependencyManagement {
@@ -38,28 +30,30 @@ allprojects {
                 mavenBom(BOM_COORDINATES)
             }
             dependency("io.micrometer:context-propagation:$propagation")
+            dependency("commons-io:commons-io:$commonsIo")
+            dependency("com.palantir.javaformat:palantir-java-format:$palantir")
+            dependency("com.google.guava:guava:$guava")
         }
     }
 
     configurations.all {
         resolutionStrategy {
             failOnVersionConflict()
-            force("com.google.guava:guava:32.1.2-jre")
-            force("org.sonarsource.sslr:sslr-core:1.24.0.633")
-            force("com.google.code.findbugs:jsr305:3.0.2")
-            force("org.eclipse.platform:org.eclipse.osgi:3.18.300")
-            force("org.eclipse.platform:org.eclipse.equinox.common:3.17.100")
-            force("org.jboss.threads:jboss-threads:3.5.0.Final")
-            force("org.wildfly.common:wildfly-common:1.5.4.Final")
         }
     }
 }
 
 subprojects {
     plugins.apply(JavaPlugin::class.java)
+    plugins.withType<JavaPlugin> {
+        project.dependencies.add(
+            "compileOnly",
+            "com.palantir.javaformat:palantir-java-format"
+        )
+    }
     extensions.configure<JavaPluginExtension> {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_25
+        targetCompatibility = JavaVersion.VERSION_25
     }
 
     tasks.withType<JavaCompile> {
@@ -71,7 +65,7 @@ subprojects {
     apply<com.diffplug.gradle.spotless.SpotlessPlugin>()
     configure<com.diffplug.gradle.spotless.SpotlessExtension> {
         java {
-            palantirJavaFormat("2.38.0")
+            palantirJavaFormat()
         }
     }
 

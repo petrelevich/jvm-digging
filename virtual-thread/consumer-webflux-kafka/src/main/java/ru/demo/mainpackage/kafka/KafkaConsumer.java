@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import ru.demo.mainpackage.json.JsonDeserializer;
 import ru.demo.mainpackage.model.Response;
 
+@SuppressWarnings("java:S2245")
 public final class KafkaConsumer {
     private static final Logger log = LoggerFactory.getLogger(KafkaConsumer.class);
     private final Random random = new Random();

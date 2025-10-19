@@ -12,9 +12,10 @@ dependencies {
 jib {
     container {
         creationTime.set("USE_CURRENT_TIMESTAMP")
+        mainClass = "ru.demo.mainpackage.VirtualThreadKafkaDemo"
     }
     from {
-        image = "bellsoft/liberica-openjdk-alpine-musl:21.0.1"
+        image = "bellsoft/liberica-openjdk-alpine-musl:25"
     }
 
     to {
