@@ -8,6 +8,13 @@ include("producer-virtual-thread")
 include("consumer-webflux-kafka")
 include("kafka-request-processor")
 
+include("rest-service")
+include("rest-service-client")
+include("rest-service-client-virtual-thread")
+include("calculations")
+include("calculations-virtual-thread")
+include("rest-service-synch")
+
 pluginManagement {
     plugins {
         id("fr.brouillard.oss.gradle.jgitver") version "0.10.0-rc03"

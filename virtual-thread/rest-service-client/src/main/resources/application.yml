@@ -1,0 +1,2 @@
+application:
+  data-source: "http://localhost:8080"
