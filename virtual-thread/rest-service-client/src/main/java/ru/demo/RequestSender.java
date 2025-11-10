@@ -1,6 +1,7 @@
 package ru.demo;
 
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ public class RequestSender implements CommandLineRunner {
     private final RestClient restClient;
     private final ExecutorService executor;
     private final AtomicLong currentRequestCounter = new AtomicLong(0);
+    private final AtomicInteger requestsInTheFly = new AtomicInteger(0);
 
     public RequestSender(RestClient restClient, ExecutorService executor) {
         this.restClient = restClient;
@@ -38,14 +40,16 @@ public class RequestSender implements CommandLineRunner {
     }
 
     private void doRequest() {
-        log.info("do request");
+        var requestsInTheFlyVal = requestsInTheFly.incrementAndGet();
+        log.info("do request. InTheFly:{}", requestsInTheFlyVal);
         var result = restClient
                 .get()
                 .uri("/data")
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(String.class);
-        log.info("result:{}", result);
+        requestsInTheFlyVal = requestsInTheFly.decrementAndGet();
+        log.info("result:{}. InTheFly:{}", result, requestsInTheFlyVal);
         currentRequestCounter.incrementAndGet();
     }
 }
