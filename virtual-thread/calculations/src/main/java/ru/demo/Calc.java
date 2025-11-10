@@ -65,7 +65,12 @@ public class Calc implements CommandLineRunner {
                 duration = (now - prevTime) / 1000;
             }
             prevTimes.put(agentName, now);
-            log.info("agentName:{}, counter:{}, duration, sec:{}", agentName, counter, duration);
+            log.info(
+                    "virtual:{}, agentName:{}, counter:{}, duration, sec:{}",
+                    Thread.currentThread().isVirtual(),
+                    agentName,
+                    counter,
+                    duration);
         }
     }
 
