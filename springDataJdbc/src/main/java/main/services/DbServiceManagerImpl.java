@@ -11,37 +11,39 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DbServiceManagerImpl implements DBServiceManager {
-    private static final Logger log = LoggerFactory.getLogger(DbServiceManagerImpl.class);
+  private static final Logger log = LoggerFactory.getLogger(DbServiceManagerImpl.class);
 
-    private final ManagerRepository managerRepository;
-    private final TransactionRunner transactionRunner;
+  private final ManagerRepository managerRepository;
+  private final TransactionRunner transactionRunner;
 
-    public DbServiceManagerImpl(ManagerRepository managerRepository, TransactionRunner transactionRunner) {
-        this.managerRepository = managerRepository;
-        this.transactionRunner = transactionRunner;
-    }
+  public DbServiceManagerImpl(
+      ManagerRepository managerRepository, TransactionRunner transactionRunner) {
+    this.managerRepository = managerRepository;
+    this.transactionRunner = transactionRunner;
+  }
 
-    @Override
-    public Manager saveManager(Manager manager) {
-        return transactionRunner.doInTransaction(() -> {
-            var savedManager = managerRepository.save(manager);
+  @Override
+  public Manager saveManager(Manager manager) {
+    return transactionRunner.doInTransaction(
+        () -> {
+          var savedManager = managerRepository.save(manager);
 
-            log.info("savedManager manager: {}", savedManager);
-            return savedManager;
+          log.info("savedManager manager: {}", savedManager);
+          return savedManager;
         });
-    }
+  }
 
-    @Override
-    public Optional<Manager> getManager(String no) {
-        var managerOptional = managerRepository.findById(no);
-        log.info("manager: {}", managerOptional);
-        return managerOptional;
-    }
+  @Override
+  public Optional<Manager> getManager(String no) {
+    var managerOptional = managerRepository.findById(no);
+    log.info("manager: {}", managerOptional);
+    return managerOptional;
+  }
 
-    @Override
-    public List<Manager> findAll() {
-        var managerList = managerRepository.findAll();
-        log.info("managerList:{}", managerList);
-        return managerList;
-    }
+  @Override
+  public List<Manager> findAll() {
+    var managerList = managerRepository.findAll();
+    log.info("managerList:{}", managerList);
+    return managerList;
+  }
 }

@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class EventsConfig {
 
-    @Bean
-    public ClientListener ownerListener() {
-        return new ClientListener();
-    }
+  @Bean
+  public ClientListener ownerListener() {
+    return new ClientListener();
+  }
 }

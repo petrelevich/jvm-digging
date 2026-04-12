@@ -6,9 +6,9 @@ import main.model.Client;
 
 public interface DBServiceClient {
 
-    Client saveClient(Client client);
+  Client saveClient(Client client);
 
-    Optional<Client> getClient(long id);
+  Optional<Client> getClient(long id);
 
-    List<Client> findAll();
+  List<Client> findAll();
 }

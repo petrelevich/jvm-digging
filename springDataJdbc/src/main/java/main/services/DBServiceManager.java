@@ -6,9 +6,9 @@ import main.model.Manager;
 
 public interface DBServiceManager {
 
-    Manager saveManager(Manager client);
+  Manager saveManager(Manager client);
 
-    Optional<Manager> getManager(String no);
+  Optional<Manager> getManager(String no);
 
-    List<Manager> findAll();
+  List<Manager> findAll();
 }

@@ -7,10 +7,10 @@ import org.springframework.data.relational.core.mapping.event.AbstractRelational
 import org.springframework.data.relational.core.mapping.event.AfterSaveEvent;
 
 public class ClientListener extends AbstractRelationalEventListener<Client> {
-    private static final Logger log = LoggerFactory.getLogger(ClientListener.class);
+  private static final Logger log = LoggerFactory.getLogger(ClientListener.class);
 
-    @Override
-    protected void onAfterSave(AfterSaveEvent<Client> event) {
-        log.info("After Client SaveEvent, client:{}", event.getEntity());
-    }
+  @Override
+  protected void onAfterSave(AfterSaveEvent<Client> event) {
+    log.info("After Client SaveEvent, client:{}", event.getEntity());
+  }
 }
