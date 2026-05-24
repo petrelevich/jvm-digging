@@ -1,0 +1,13 @@
+server:
+  port: 8080
+
+application:
+  client-name: "mvc"
+  redis:
+    url: "localhost:6379"
+    password: "passWd"
+
+spring:
+  threads:
+    virtual:
+      enabled: false
