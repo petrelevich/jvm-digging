@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.demo.model.ClientData;
 
 @RestController
-public class ClientController {
-    private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
+public class ClientInfoController {
+    private static final Logger logger = LoggerFactory.getLogger(ClientInfoController.class);
 
     // curl -v http://localhost:8083/additional-info?name="testClient"
 
@@ -25,6 +25,6 @@ public class ClientController {
     }
 
     private void doJob() throws InterruptedException {
-        Thread.sleep(Duration.ofMillis(110));
+        Thread.sleep(Duration.ofMillis(100));
     }
 }

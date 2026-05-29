@@ -25,6 +25,7 @@ public class CircuitBreakerDemo {
         new CircuitBreakerDemo().go();
     }
 
+    @SuppressWarnings("java:S125")
     private void go() {
         var circuitBreakerConfig = CircuitBreakerConfig.custom()
                 .failureRateThreshold(50)
@@ -99,7 +100,7 @@ public class CircuitBreakerDemo {
         var currentCounter = execCounter++;
         log.info("exception action, counter:{}", currentCounter);
         sleep(1);
-        throw new RuntimeException("TestError");
+        throw new ApplException("TestError");
     }
 
     private void sleep(int seconds) {

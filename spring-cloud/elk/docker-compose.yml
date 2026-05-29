@@ -105,6 +105,12 @@ services:
     network_mode: "host"
     environment:
       DYNAMIC_CONFIG_ENABLED: 'true'
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: localhost:9092
+    deploy:
+      resources:
+        limits:
+          memory: "256M"
 
   zipkin:
     container_name: zipkin

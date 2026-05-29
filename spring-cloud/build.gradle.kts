@@ -1,11 +1,9 @@
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import name.remal.gradle_plugins.sonarlint.SonarLintExtension
 import org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
-import org.gradle.plugins.ide.idea.model.IdeaLanguageLevel
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
-    idea
     id("fr.brouillard.oss.gradle.jgitver")
     id("io.spring.dependency-management")
     id("org.springframework.boot") apply false
@@ -67,7 +65,9 @@ allprojects {
 }
 
 subprojects {
-    plugins.apply(SpringBootPlugin::class.java)
+    if (name != "resilience4j") {
+        plugins.apply(SpringBootPlugin::class.java)
+    }
     plugins.apply(JavaPlugin::class.java)
     extensions.configure<JavaPluginExtension> {
         sourceCompatibility = JavaVersion.VERSION_21
