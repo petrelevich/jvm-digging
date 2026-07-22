@@ -17,8 +17,9 @@ public class ServerJetty {
     public ServerJetty(int serverPort, ApiHandler apiHandler) {
         QueuedThreadPool threadPool = new QueuedThreadPool();
         threadPool.setName("server");
-        threadPool.setIdleTimeout(1_000);
+        threadPool.setIdleTimeout(30_000);
         threadPool.setMaxThreads(20);
+        threadPool.setMinThreads(20);
 
         server = new Server(threadPool);
 
