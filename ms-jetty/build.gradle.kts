@@ -24,7 +24,6 @@ allprojects {
     val guava = "33.6.0-jre"
     val log4j = "2.26.0"
     val disruptor = "4.0.0"
-    val conversantmediaDisruptor = "1.2.21"
 
     apply(plugin = "io.spring.dependency-management")
     dependencyManagement {
@@ -39,7 +38,6 @@ allprojects {
             dependency("org.redisson:redisson:$redisson")
 
             dependency("com.lmax:disruptor:$disruptor")
-            dependency("com.conversantmedia:disruptor:$conversantmediaDisruptor")
         }
     }
 

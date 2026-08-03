@@ -4,19 +4,14 @@
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg %n"/>
         </Console>
-
-        <Async name="Async-Console" blocking="false" bufferSize="10000" errorRef="Console">
-            <AppenderRef ref="Console"/>
-            <DisruptorBlockingQueue/>
-        </Async>
     </Appenders>
 
     <Loggers>
-        <logger name="org.eclipse.jetty.util.thread.strategy" level="INFO">
-            <AppenderRef ref="Async-Console"/>
-        </logger>
-        <Root level="info">
-            <AppenderRef ref="Async-Console"/>
-        </Root>
+        <AsyncLogger name="org.eclipse.jetty.util.thread.strategy" level="INFO">
+            <AppenderRef ref="Console"/>
+        </AsyncLogger>
+        <AsyncRoot level="info">
+            <AppenderRef ref="Console"/>
+        </AsyncRoot>
     </Loggers>
 </Configuration>

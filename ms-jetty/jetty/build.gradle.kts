@@ -21,7 +21,6 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-core")
 
     implementation("com.lmax:disruptor")
-    implementation("com.conversantmedia:disruptor")
 }
 
 jib {

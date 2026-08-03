@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="JettyDemo" type="AmplicodeSpringBootApplication" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="ru.demo.JettyDemo" />
+    <module name="ms-jetty.jetty.main" />
+    <option name="profiles">
+      <list>
+        <option value="" />
+      </list>
+    </option>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
