@@ -22,7 +22,7 @@ public class ServiceRedis {
         get(key, value -> {
             String result;
             if (value != null) {
-                result = (String) value;
+                result = value;
             } else {
                 result = "str:%s".formatted(id);
                 put(key, result);
@@ -36,8 +36,9 @@ public class ServiceRedis {
         bucket.setAsync(applValue).thenAccept(value -> log.info("saved id:{}, value:{}", key, applValue));
     }
 
-    private void get(String key, Consumer<Object> valueConsumer) {
-        RFuture<Object> bucketAsync = redissonClient.getBucket(key).getAsync();
+    private void get(String key, Consumer<String> valueConsumer) {
+        RBucket<String> bucket = redissonClient.getBucket(key);
+        RFuture<String> bucketAsync = bucket.getAsync();
         bucketAsync
                 .thenAccept(value -> {
                     log.info("key:{}, value:{}", key, value);
